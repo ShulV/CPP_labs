@@ -1,4 +1,4 @@
-// лабораторная работа №2 Шульпов Виктор ПИ-92
+// lab work №2 Shulpov Victor PI-92
 #define _CRT_SECURE_NO_WARNINGS
 #include <stdio.h>
 #include <conio.h>
@@ -8,37 +8,40 @@
 #include <malloc.h>
 #define MAX_BUFF_SIZE 50
 
-struct car_type {
+typedef struct car_type {
 	char name[MAX_BUFF_SIZE];
 	int price;
 	char color[MAX_BUFF_SIZE];
 	int engineRPM;
 	int speed;
 	int benzine;
-} car;
-//typedef struct car_type car;
+};
 
-void init();
-void setDataCar();
+struct car_type init();
+struct car_type setDataCar(struct car_type car);
 
 int main(void)
 {
-	init();
-	printf("%s", car.name);
-	setDataCar();
-	printf("%s", car.name);
+	struct car_type car = init();
+	printf("%s\n", car.name);
+	car = setDataCar(car);
+	printf("%s\n", car.name);
 
 	return 0;
 }
 
-void init() {
+struct car_type init() {
+	struct car_type car = { "0", 0, "0", 0, 0, 0 };
 	printf("Car initialized\n");
-	printf("Enter a car name: ");
-	fflush(stdin);
-	scanf("%s", &car.name);
+	return car;
+
 }
 
-void setDataCar() {
+struct car_type setDataCar(struct car_type car) {
 	printf("Car parameters set!\n");
+	printf("Enter a car name: ");
+	fflush(stdin);
+	scanf("%s", car.name);
+	return car;
 }
 
