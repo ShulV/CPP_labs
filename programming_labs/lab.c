@@ -42,6 +42,12 @@ struct car_type setDataCar(struct car_type car) {
 	printf("Enter a car name: ");
 	fflush(stdin);
 	scanf("%s", car.name);
+	printf("Enter a car price: ");
+	fflush(stdin);
+	scanf("%d", car.price);
+	printf("Enter a car color: ");
+	fflush(stdin);
+	scanf("%s", car.color);
 	return car;
 }
 
