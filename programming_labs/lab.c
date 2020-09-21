@@ -30,42 +30,35 @@ int main(void)
 {
 	int n;
 	struct car* car;
-	car = init("BMW");
-	free(car);
-	car = init("AUDI");
-	free(car);
-	car = init("VOLVO");
-	displayDataCar(car);
-	setDataCar(car);
-	displayDataCar(car);
-	free(car);
-
+	car = init("BMW"); //инициализируем машину1 (выделяем под нее память, заполняем стандартными значениями)
+	free(car); //очищаем память, выделенную под машину1
+	struct car* car1;
+	car1 = init("AUDI"); //инициализируем машину2
+	free(car1);//очищаем память, выделенную под машину2
+	struct car* car3;
+	car3 = init("VOLVO"); //инициализируем машину3
+	displayDataCar(car3); //отображаем параметры машины3
+	setDataCar(car3); //устанавлливаем параметры: имя, цену, цвет (остальное уже 0)
+	displayDataCar(car3); 
+	startEngine(car3); //пытаемся завести двигатель
+	displayDataCar(car3);
+	addBenzine(car3, 10); //добавляем бензин
+	displayDataCar(car3);
+	startEngine(car3); //снова пытаемся завести двигатель
+	displayDataCar(car3);
+	for (int i = 0; i < 4; i++) {
+		addSpeed(car3); //добавляем скорость по 20 км/ч 4 раза
+	}
+	displayDataCar(car3);
+	for (int i = 0; i < 4; i++) {
+		reduceSpeed(car3); //убавляем скорость по 20 км/ч 4 раза
+	}
+	displayDataCar(car3);
+	stopEngine(car3); //останавливаем двигатель
+	displayDataCar(car3);
+	free(car3); //очищаем память, выделенную под машину3
 	return 0;
 }
-	/*
-	displayDataCar(car);
-	*car = setDataCar(*car);
-	displayDataCar(*car);
-	*car = startEngine(*car);
-	displayDataCar(*car);
-	car = addBenzine(car, 10);
-	displayDataCar(car);
-	car = startEngine(car);
-	displayDataCar(car);
-	for(int i=0; i<4; i++) {
-		car = addSpeed(car);
-		displayDataCar(car);
-	}
-	for (int i = 0; i < 5; i++) {
-		car = reduceSpeed(car);
-		displayDataCar(car);
-	}
-	car = stopEngine(car);
-	displayDataCar(car);
-	*/
-	
-
-
 
 struct car* init(char* name) {
 	struct car* car;
@@ -114,59 +107,60 @@ void displayDataCar(struct car* car) {
 	printf("\t\tSpeed:\t%d\n", num);
 	num = (*car).benzine;
 	printf("\t\tBenzine:\t%d\n", num);
-}
-/*
-struct car_stack* addBenzine(struct car_stack* car, int liters) {
-	printf("%d lit. benzine added!\n", liters);
-	car.benzine += liters;
-	return *car;
+	return car;
 }
 
-struct car_stack* startEngine(struct car_stack* car) {
-	if (car.benzine > 0) {
-		car.engineRPM = 800;
+struct car* addBenzine(struct car* car, int liters) {
+	printf("%d lit. benzine added!\n", liters);
+	car->benzine += liters;
+	return car;
+}
+
+struct car* startEngine(struct car* car) {
+	if (car->benzine > 0) {
+		car->engineRPM = 800;
 		printf("Engine started!\n");
 	}
 	else {
 		printf("No benzine. Engine didn't start!\n");
 	}
-	return *car;
+	return car;
 }
 
-struct car_stack* stopEngine(struct car_stack* car) {
-	if (car.engineRPM > 0) {
-		car.engineRPM = 0;
+struct car* stopEngine(struct car* car) {
+	if (car->engineRPM > 0) {
+		car->engineRPM = 0;
 		printf("Engine stopped!\n");
 	}
 	else {
 		printf("Engine stopped already!\n");
 	}
-	return *car;
+	return car;
 }
 
-struct car_stack* addSpeed(struct car_stack* car) {
+struct car* addSpeed(struct car* car) {
 	int speed = 20;
-	if (car.engineRPM > 0) {
-		car.speed += speed;
+	if (car->engineRPM > 0) {
+		car->speed += speed;
 		printf("Car speeded up!\n");
 	}
 	else {
 		printf("Engine isn't starting. Car didn't speed up!\n");
 	}
-	return *car;
+	return car;
 }
 
-struct car_stack* reduceSpeed(struct car_stack* car) {
+struct car* reduceSpeed(struct car* car) {
 	int speed = 20;
-	if (car.speed > 0) {
-		car.speed -= speed;
+	if (car->speed > 0) {
+		car->speed -= speed;
 		printf("Car speeded down!\n");
 	}
 	else {
 		printf("Car is parking. Car didn't speed down!\n");
 	}
-	return *car;
+	return car;
 }
 
 
-*/
+
