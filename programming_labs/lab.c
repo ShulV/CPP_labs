@@ -37,7 +37,7 @@ typedef struct car {
 
 void init(struct car* car, char* name, int price, char* color, int engineRPM, int speed, int benzine); //init
 void displayDataCar(struct car car);
-struct car* addBenzine(struct car* car, int liters);
+void addBenzine(struct car* car, int liters);
 int startEngine(struct car* car);
 int stopEngine(struct car* car);
 int addSpeed(struct car* car);
@@ -111,7 +111,7 @@ void displayDataCar(struct car car) {
 	
 	
 
-struct car* addBenzine(struct car* car, int liters) {
+void addBenzine(struct car* car, int liters) {
 	printf("%d lit. benzine added!\n", liters);
 	car->benzine += liters;
 	return car;
@@ -168,3 +168,6 @@ int reduceSpeed(struct car* car) {
 		return 1;
 	}
 }
+/*
+испрченный код
+*/
