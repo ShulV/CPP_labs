@@ -168,7 +168,3 @@ int reduceSpeed(struct car* car) {
 		return 1;
 	}
 }
-
-/*
-ÊÎÄ ÄËß ÎÒÊÀÒÀ
-*/
