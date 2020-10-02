@@ -1,21 +1,21 @@
-// lab work №2 Shulpov Victor PI-92
+п»ї// lab work в„–2 Shulpov Victor PI-92
 /*
-Реализовать работу автомобиля на примере динамической структуры.
-Поля структуры:
-•	Название (строка)
-•	Цена (целое)
-•	Цвет (строка)
-•	Количество оборотов двигателя в минуту (целое)
-•	Скорость (целое)
-•	Количество бензина (целое)
-Функции:
-•	Инициализация
-•	Установка параметров автомобиля
-•	Вывод данных машины
-•	Запуск двигателя
-•	Остановка двигателя
-•	Добавление скорости
-•	Уменьшить скорость
+Р РµР°Р»РёР·РѕРІР°С‚СЊ СЂР°Р±РѕС‚Сѓ Р°РІС‚РѕРјРѕР±РёР»СЏ РЅР° РїСЂРёРјРµСЂРµ РґРёРЅР°РјРёС‡РµСЃРєРѕР№ СЃС‚СЂСѓРєС‚СѓСЂС‹.
+РџРѕР»СЏ СЃС‚СЂСѓРєС‚СѓСЂС‹:
+вЂў	РќР°Р·РІР°РЅРёРµ (СЃС‚СЂРѕРєР°)
+вЂў	Р¦РµРЅР° (С†РµР»РѕРµ)
+вЂў	Р¦РІРµС‚ (СЃС‚СЂРѕРєР°)
+вЂў	РљРѕР»РёС‡РµСЃС‚РІРѕ РѕР±РѕСЂРѕС‚РѕРІ РґРІРёРіР°С‚РµР»СЏ РІ РјРёРЅСѓС‚Сѓ (С†РµР»РѕРµ)
+вЂў	РЎРєРѕСЂРѕСЃС‚СЊ (С†РµР»РѕРµ)
+вЂў	РљРѕР»РёС‡РµСЃС‚РІРѕ Р±РµРЅР·РёРЅР° (С†РµР»РѕРµ)
+Р¤СѓРЅРєС†РёРё:
+вЂў	РРЅРёС†РёР°Р»РёР·Р°С†РёСЏ
+вЂў	РЈСЃС‚Р°РЅРѕРІРєР° РїР°СЂР°РјРµС‚СЂРѕРІ Р°РІС‚РѕРјРѕР±РёР»СЏ
+вЂў	Р’С‹РІРѕРґ РґР°РЅРЅС‹С… РјР°С€РёРЅС‹
+вЂў	Р—Р°РїСѓСЃРє РґРІРёРіР°С‚РµР»СЏ
+вЂў	РћСЃС‚Р°РЅРѕРІРєР° РґРІРёРіР°С‚РµР»СЏ
+вЂў	Р”РѕР±Р°РІР»РµРЅРёРµ СЃРєРѕСЂРѕСЃС‚Рё
+вЂў	РЈРјРµРЅСЊС€РёС‚СЊ СЃРєРѕСЂРѕСЃС‚СЊ
 */
 #define _CRT_SECURE_NO_WARNINGS
 #include <stdio.h>
@@ -37,7 +37,7 @@ typedef struct car {
 
 void init(struct car* car, char* name, int price, char* color, int engineRPM, int speed, int benzine); //init
 void displayDataCar(struct car car);
-void addBenzine(struct car* car, int liters);
+struct car* addBenzine(struct car* car, int liters);
 int startEngine(struct car* car);
 int stopEngine(struct car* car);
 int addSpeed(struct car* car);
@@ -48,35 +48,35 @@ int main(void)
 	int n;
 	struct car* pCar1;
 	pCar1 = (struct car*)malloc(sizeof(struct car));
-	init(pCar1, 1200000, "BMW", "red", 0, 0, 0); //инициализируем машину1 (выделяем под нее память, заполняем стандартными значениями)
-	free(pCar1); //очищаем память, выделенную под машину1
+	init(pCar1, 1200000, "BMW", "red", 0, 0, 0); //РёРЅРёС†РёР°Р»РёР·РёСЂСѓРµРј РјР°С€РёРЅСѓ1 (РІС‹РґРµР»СЏРµРј РїРѕРґ РЅРµРµ РїР°РјСЏС‚СЊ, Р·Р°РїРѕР»РЅСЏРµРј СЃС‚Р°РЅРґР°СЂС‚РЅС‹РјРё Р·РЅР°С‡РµРЅРёСЏРјРё)
+	free(pCar1); //РѕС‡РёС‰Р°РµРј РїР°РјСЏС‚СЊ, РІС‹РґРµР»РµРЅРЅСѓСЋ РїРѕРґ РјР°С€РёРЅСѓ1
 	struct car* car1;
 	car1 = (struct car*)malloc(sizeof(struct car));
-	init(car1, 1200000, "AUDI", "red", 0, 0, 0); //инициализируем машину2
-	free(car1);//очищаем память, выделенную под машину2
-	//используем все функции на третьей машине
+	init(car1, 1200000, "AUDI", "red", 0, 0, 0); //РёРЅРёС†РёР°Р»РёР·РёСЂСѓРµРј РјР°С€РёРЅСѓ2
+	free(car1);//РѕС‡РёС‰Р°РµРј РїР°РјСЏС‚СЊ, РІС‹РґРµР»РµРЅРЅСѓСЋ РїРѕРґ РјР°С€РёРЅСѓ2
+	//РёСЃРїРѕР»СЊР·СѓРµРј РІСЃРµ С„СѓРЅРєС†РёРё РЅР° С‚СЂРµС‚СЊРµР№ РјР°С€РёРЅРµ
 	//struct car car3 = { " ", 0, " ", 0, 0, 0 };
 	struct car* pCar3;// = &car3;
 	pCar3 = (struct car*)malloc(sizeof(struct car));
-	init(pCar3, "VOLVO", 1299999, "blue", 0, 0, 10); //инициализируем машину3
-	displayDataCar(*pCar3); //отображаем параметры машины3
-	startEngine(pCar3); //пытаемся завести двигатель
+	init(pCar3, "VOLVO", 1299999, "blue", 0, 0, 10); //РёРЅРёС†РёР°Р»РёР·РёСЂСѓРµРј РјР°С€РёРЅСѓ3
+	displayDataCar(*pCar3); //РѕС‚РѕР±СЂР°Р¶Р°РµРј РїР°СЂР°РјРµС‚СЂС‹ РјР°С€РёРЅС‹3
+	startEngine(pCar3); //РїС‹С‚Р°РµРјСЃСЏ Р·Р°РІРµСЃС‚Рё РґРІРёРіР°С‚РµР»СЊ
 	displayDataCar(*pCar3);
-	addBenzine(pCar3, 10); //добавляем бензин
+	addBenzine(pCar3, 10); //РґРѕР±Р°РІР»СЏРµРј Р±РµРЅР·РёРЅ
 	displayDataCar(*pCar3);
-	startEngine(pCar3); //снова пытаемся завести двигатель
+	startEngine(pCar3); //СЃРЅРѕРІР° РїС‹С‚Р°РµРјСЃСЏ Р·Р°РІРµСЃС‚Рё РґРІРёРіР°С‚РµР»СЊ
 	displayDataCar(*pCar3);
 	for (int i = 0; i < 4; i++) {
-		addSpeed(pCar3); //добавляем скорость по 20 км/ч 4 раза
+		addSpeed(pCar3); //РґРѕР±Р°РІР»СЏРµРј СЃРєРѕСЂРѕСЃС‚СЊ РїРѕ 20 РєРј/С‡ 4 СЂР°Р·Р°
 	}
 	displayDataCar(*pCar3);
 	for (int i = 0; i < 4; i++) {
-		reduceSpeed(pCar3); //убавляем скорость по 20 км/ч 4 раза
+		reduceSpeed(pCar3); //СѓР±Р°РІР»СЏРµРј СЃРєРѕСЂРѕСЃС‚СЊ РїРѕ 20 РєРј/С‡ 4 СЂР°Р·Р°
 	}
 	displayDataCar(*pCar3);
-	stopEngine(pCar3); //останавливаем двигатель
+	stopEngine(pCar3); //РѕСЃС‚Р°РЅР°РІР»РёРІР°РµРј РґРІРёРіР°С‚РµР»СЊ
 	displayDataCar(*pCar3);
-	free(pCar3); //очищаем память, выделенную под машину3
+	free(pCar3); //РѕС‡РёС‰Р°РµРј РїР°РјСЏС‚СЊ, РІС‹РґРµР»РµРЅРЅСѓСЋ РїРѕРґ РјР°С€РёРЅСѓ3
 	return 0;
 }
 
@@ -106,12 +106,12 @@ void displayDataCar(struct car car) {
 	printf("\t\tSpeed:\t%d\n", num);
 	num = car.benzine;
 	printf("\t\tBenzine:\t%d\n", num);
-	
-}
-	
-	
 
-void addBenzine(struct car* car, int liters) {
+}
+
+
+
+struct car* addBenzine(struct car* car, int liters) {
 	printf("%d lit. benzine added!\n", liters);
 	car->benzine += liters;
 	return car;
@@ -127,8 +127,8 @@ int startEngine(struct car* car) {
 		printf("No benzine. Engine didn't start!\n");
 		return 1;
 	}
-	
-	
+
+
 }
 
 int stopEngine(struct car* car) {
@@ -168,6 +168,3 @@ int reduceSpeed(struct car* car) {
 		return 1;
 	}
 }
-/*
-испрченный код
-*/
