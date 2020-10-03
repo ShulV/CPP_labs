@@ -20,7 +20,6 @@
 #define _CRT_SECURE_NO_WARNINGS
 #include <iostream>
 #include <conio.h>
-
 #define CAR_NUMBERS 100
 
 
@@ -28,10 +27,10 @@ class Car
 {
 public:
 	void init(char* name, int price, char* color, int engineRPM, int speed, int benzine); //init
-	char* name;
+	void displayDataCar();
 
 private:
-	
+	char* name;
 	int price;
 	char* color;
 	int engineRPM;
@@ -52,6 +51,19 @@ void Car::init(char* name, int price, char* color, int engineRPM, int speed, int
 	printf("Car initialized!\n");
 }
 
+void Car::displayDataCar()
+{
+	std::cout << "\t" << "Car data" << std::endl;
+	std::cout << "\t\tName:\t"<< this->name << std::endl;
+	std::cout << "\t\tPrice:\t" << this->price << std::endl;
+	std::cout << "\t\tColor:\t" << this->color << std::endl;
+	std::cout << "\t\tEngineRPM:\t" << this->engineRPM << std::endl;
+	std::cout << "\t\tBenzine:\t" << this->benzine << std::endl;
+	std::cout << "\t\tSpeed:\t" << this->speed << std::endl;
+}
+
+
+
 
 int main()
 {
@@ -59,9 +71,8 @@ int main()
 	strcat(name,"BMW");
 	strcat(color, "red");
 	car->init(name, 100, color, 0, 0, 0);
-
-    std::cout << car[0].name <<"\n";
-
+	car->displayDataCar();
+	
 	_getch();
 	return 0;
 }
