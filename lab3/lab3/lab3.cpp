@@ -29,7 +29,10 @@ public:
 	void init(char* name, int price, char* color, int engineRPM, int speed, int benzine); //init
 	void displayDataCar(); //display
 	void addBenzine(int liters);
-
+	void startEngine();
+	void stopEngine();
+	void addSpeed(int speed);
+	void reduceSpeed(int speed);
 private:
 	char* name;
 	int price;
@@ -67,6 +70,23 @@ void Car::addBenzine(int liters)
 {
 	std::cout << liters << "lit. benzine added!" << std::endl;
 	car->benzine += liters;
+}
+
+void Car::startEngine()
+{
+	//work here
+}
+
+void Car::stopEngine()
+{
+}
+
+void Car::addSpeed(int speed)
+{
+}
+
+void Car::reduceSpeed(int speed)
+{
 }
 
 int main()
