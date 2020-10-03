@@ -27,7 +27,8 @@ class Car
 {
 public:
 	void init(char* name, int price, char* color, int engineRPM, int speed, int benzine); //init
-	void displayDataCar();
+	void displayDataCar(); //display
+	void addBenzine(int liters);
 
 private:
 	char* name;
@@ -62,8 +63,11 @@ void Car::displayDataCar()
 	std::cout << "\t\tSpeed:\t" << this->speed << std::endl;
 }
 
-
-
+void Car::addBenzine(int liters)
+{
+	std::cout << liters << "lit. benzine added!" << std::endl;
+	car->benzine += liters;
+}
 
 int main()
 {
@@ -71,6 +75,8 @@ int main()
 	strcat(name,"BMW");
 	strcat(color, "red");
 	car->init(name, 100, color, 0, 0, 0);
+	car->displayDataCar();
+	car->addBenzine(10);
 	car->displayDataCar();
 	
 	_getch();
