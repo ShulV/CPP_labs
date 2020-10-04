@@ -20,14 +20,16 @@
 #define _CRT_SECURE_NO_WARNINGS
 #include <iostream>
 #include <conio.h>
-#define CAR_NUMBERS 100
+#define clear(stream) rewind((stream)) //очистка потока
+#define CAR_NUMBERS 10
 
 
 class Car
 {
 public:
-	void init(char* name, int price, char* color, int engineRPM, int speed, int benzine); //init
-	void displayDataCar(); //display
+	void init(char* name, int price, char* color, int engineRPM, int speed, int benzine);
+	void readCarData();
+	void displayDataCar(); 
 	void addBenzine(int liters);
 	void startEngine();
 	void stopEngine();
@@ -42,8 +44,6 @@ private:
 	int benzine;
 };
 
-
-
 void Car::init(char* name, int price, char* color, int engineRPM, int speed, int benzine)
 {
 	this->name = name;
@@ -53,6 +53,28 @@ void Car::init(char* name, int price, char* color, int engineRPM, int speed, int
 	this->benzine = benzine;
 	this->speed = speed;
 	printf("Car initialized!\n");
+}
+
+void Car::readCarData() {
+	std::cout << "ENTER CAR DATA:" << std::endl;
+	std::cout << "\tname:\t";
+	std::cin >> this->name;
+	clear(stdin);
+	std::cout << "\tprice:\t";
+	std::cin >> this->price;
+	clear(stdin);
+	std::cout << "\tcolor:\t";
+	std::cin >> this->color;
+	clear(stdin);
+	std::cout << "\tengineRPM:\t";
+	std::cin >> this->engineRPM;
+	clear(stdin);
+	std::cout << "\tspeed:\t";
+	std::cin >> this->speed;
+	clear(stdin);
+	std::cout << "\tbenzine:\t";
+	std::cin >> this->benzine;
+	clear(stdin);
 }
 
 void Car::displayDataCar()
@@ -119,34 +141,64 @@ void Car::reduceSpeed(int speed)
 int main()
 
 {
-	Car* car;
-	car = new Car; // выделение памяти для объекта
-
+	std::cout << "\n\nSTATIC OBJECT\n\n";
+	Car static_obj_car;
 	char name[100] = "", color[100] = "";
-	strcat(name,"BMW");
-	strcat(color, "red");
-	car->init(name, 100, color, 0, 0, 0); //инициализируем поля объекта
-	car->displayDataCar();
-	car->startEngine(); //пытаемся завести двигатель
-	car->displayDataCar();
-	car->addBenzine(10); //добавляем бензин
-	car->displayDataCar();
-	car->startEngine(); //снова пытаемся завести двигатель
-	car->displayDataCar();
+	static_obj_car.init(name, 0, color, 0, 0, 0); //инициализируем поля объекта
+	static_obj_car.displayDataCar();
+	static_obj_car.readCarData();
+	static_obj_car.displayDataCar();
+	static_obj_car.startEngine(); //пытаемся завести двигатель
+	static_obj_car.displayDataCar();
+	static_obj_car.addBenzine(10); //добавляем бензин
+	static_obj_car.displayDataCar();
+	static_obj_car.startEngine(); //снова пытаемся завести двигатель
+	static_obj_car.displayDataCar();
 	for (int i = 0; i < 4; i++) {
-		car->addSpeed(i*5); //добавляем скорость
-		car->displayDataCar();
+		static_obj_car.addSpeed(i*5); //добавляем скорость
+		static_obj_car.displayDataCar();
 	}
 	for (int i = 0; i < 4; i++) {
-		car->reduceSpeed(i*5); //убавляем скорость
-		car->displayDataCar();
+		static_obj_car.reduceSpeed(i*5); //убавляем скорость
+		static_obj_car.displayDataCar();
 	}
 
-	car->stopEngine(); //останавливаем двигатель
-	car->displayDataCar();
-	
-	delete car;
+	static_obj_car.stopEngine(); //останавливаем двигатель
+	static_obj_car.displayDataCar();
 
+	std::cout << "\n\nPress key to continue!\n\n";
+	_getch();
+	////////////////////////////////////
+	/*
+	std::cout << "\n\nDYNAMIC OBJECT\n\n";
+	Car static_obj_car;
+	char name[100] = "", color[100] = "";
+	static_obj_car->init(name, 0, color, 0, 0, 0); //инициализируем поля объекта
+	static_obj_car->displayDataCar();
+	static_obj_car->readCarData();
+	static_obj_car->displayDataCar();
+	static_obj_car->startEngine(); //пытаемся завести двигатель
+	static_obj_car->displayDataCar();
+	static_obj_car->addBenzine(10); //добавляем бензин
+	static_obj_car->displayDataCar();
+	static_obj_car->startEngine(); //снова пытаемся завести двигатель
+	static_obj_car->displayDataCar();
+	for (int i = 0; i < 4; i++) {
+		static_obj_car->addSpeed(i*5); //добавляем скорость
+		static_obj_car->displayDataCar();
+	}
+	for (int i = 0; i < 4; i++) {
+		static_obj_car->reduceSpeed(i*5); //убавляем скорость
+		static_obj_car->displayDataCar();
+	}
+
+	static_obj_car->stopEngine(); //останавливаем двигатель
+	static_obj_car->displayDataCar();
+
+	std::cout << "\n\nPress key to continue!\n\n";
+	_getch();
+	////////////////////////////////////
+	*/
 	return 0;
 }
 
