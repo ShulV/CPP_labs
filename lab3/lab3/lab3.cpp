@@ -146,7 +146,7 @@ int main()
 	char name[100] = "", color[100] = "";
 	static_obj_car.init(name, 0, color, 0, 0, 0); //инициализируем поля объекта
 	static_obj_car.displayDataCar();
-	static_obj_car.readCarData();
+	//static_obj_car.readCarData();
 	static_obj_car.displayDataCar();
 	static_obj_car.startEngine(); //пытаемся завести двигатель
 	static_obj_car.displayDataCar();
@@ -168,37 +168,40 @@ int main()
 
 	std::cout << "\n\nPress key to continue!\n\n";
 	_getch();
-	////////////////////////////////////
-	/*
+	std::system("cls");
+////////////////////////////////////
 	std::cout << "\n\nDYNAMIC OBJECT\n\n";
-	Car static_obj_car;
-	char name[100] = "", color[100] = "";
-	static_obj_car->init(name, 0, color, 0, 0, 0); //инициализируем поля объекта
-	static_obj_car->displayDataCar();
-	static_obj_car->readCarData();
-	static_obj_car->displayDataCar();
-	static_obj_car->startEngine(); //пытаемся завести двигатель
-	static_obj_car->displayDataCar();
-	static_obj_car->addBenzine(10); //добавляем бензин
-	static_obj_car->displayDataCar();
-	static_obj_car->startEngine(); //снова пытаемся завести двигатель
-	static_obj_car->displayDataCar();
+	Car *dynamic_obj_car = new Car;
+	char name2[100] = "", color2[100] = "";
+	dynamic_obj_car->init(name2, 0, color2, 0, 0, 0); //инициализируем поля объекта
+	dynamic_obj_car->displayDataCar();
+	dynamic_obj_car->readCarData();
+	dynamic_obj_car->displayDataCar();
+	dynamic_obj_car->startEngine(); //пытаемся завести двигатель
+	dynamic_obj_car->displayDataCar();
+	dynamic_obj_car->addBenzine(10); //добавляем бензин
+	dynamic_obj_car->displayDataCar();
+	dynamic_obj_car->startEngine(); //снова пытаемся завести двигатель
+	dynamic_obj_car->displayDataCar();
 	for (int i = 0; i < 4; i++) {
-		static_obj_car->addSpeed(i*5); //добавляем скорость
-		static_obj_car->displayDataCar();
+		dynamic_obj_car->addSpeed(i*5); //добавляем скорость
+		dynamic_obj_car->displayDataCar();
 	}
 	for (int i = 0; i < 4; i++) {
-		static_obj_car->reduceSpeed(i*5); //убавляем скорость
-		static_obj_car->displayDataCar();
+		dynamic_obj_car->reduceSpeed(i*5); //убавляем скорость
+		dynamic_obj_car->displayDataCar();
 	}
 
-	static_obj_car->stopEngine(); //останавливаем двигатель
-	static_obj_car->displayDataCar();
+	dynamic_obj_car->stopEngine(); //останавливаем двигатель
+	dynamic_obj_car->displayDataCar();
 
+	delete dynamic_obj_car;
 	std::cout << "\n\nPress key to continue!\n\n";
 	_getch();
+	std::system("cls");
 	////////////////////////////////////
-	*/
+
 	return 0;
 }
+
 
