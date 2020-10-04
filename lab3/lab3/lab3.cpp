@@ -141,6 +141,7 @@ void Car::reduceSpeed(int speed)
 int main()
 
 {
+	//////////////////////////////////////STATIC OBJECT////////
 	std::cout << "\n\nSTATIC OBJECT\n\n";
 	Car static_obj_car;
 	char name[100] = "", color[100] = "";
@@ -169,7 +170,7 @@ int main()
 	std::cout << "\n\nPress key to continue!\n\n";
 	_getch();
 	std::system("cls");
-////////////////////////////////////
+////////////////////////////////////DYNAMIC OBJECT/////
 	std::cout << "\n\nDYNAMIC OBJECT\n\n";
 	Car *dynamic_obj_car = new Car;
 	char name2[100] = "", color2[100] = "";
@@ -196,10 +197,27 @@ int main()
 	dynamic_obj_car->displayDataCar();
 
 	delete dynamic_obj_car;
+	
+
 	std::cout << "\n\nPress key to continue!\n\n";
 	_getch();
 	std::system("cls");
-	////////////////////////////////////
+	///////////////////////////////////DYNAMIC OBJECTS ARRAY///
+	Car *dynamic_obj_cars;
+	dynamic_obj_cars = new Car[5];
+	delete[] dynamic_obj_cars;
+	///////////////////////////////////MALLOC ///
+	Car *dynamic_obj_car2;
+	dynamic_obj_car2 = (Car*)malloc(CAR_NUMBERS*sizeof(Car));
+	free(dynamic_obj_car2);
+	//////////////////////////////////CALLOC /////
+	Car* dynamic_obj_car3;
+	dynamic_obj_car3 = (Car*)calloc(CAR_NUMBERS, sizeof(Car));
+	free(dynamic_obj_car3);
+	//////////////////////////////////REALOC - change current allocated memory
+	dynamic_obj_car3 = (Car*)realloc(dynamic_obj_car3, 2*CAR_NUMBERS *sizeof(Car));
+	free(dynamic_obj_car3);
+
 
 	return 0;
 }
