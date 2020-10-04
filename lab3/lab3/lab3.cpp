@@ -74,19 +74,46 @@ void Car::addBenzine(int liters)
 
 void Car::startEngine()
 {
-	//work here
+	if (this->benzine > 0) {
+		this->engineRPM = 800;
+		std::cout << "Engine started!" << std::endl;
+	}
+	else {
+		std::cout << "No benzine. Engine didn't start!" << std::endl;
+	}
 }
 
 void Car::stopEngine()
 {
+	if (this->engineRPM > 0) {
+		this->engineRPM = 0;
+		std::cout << "Engine stopped!" << std::endl;
+	}
+	else {
+		std::cout << "Engine stopped already!" << std::endl;
+	}
 }
 
 void Car::addSpeed(int speed)
 {
+	if (this->engineRPM > 0) {
+		this->speed += speed;
+		std::cout << "Car speeded up!" << std::endl;
+	}
+	else {
+		std::cout << "Engine isn't starting. Car didn't speed up!" << std::endl;
+	}
 }
 
 void Car::reduceSpeed(int speed)
 {
+	if (car->speed > 0) {
+		car->speed -= speed;
+		std::cout << "Car speeded down!" << std::endl;
+	}
+	else {
+		std::cout << "Car is parking. Car didn't speed down!" << std::endl;
+	}
 }
 
 int main()
@@ -94,11 +121,27 @@ int main()
 	char name[] = "", color[] = "";
 	strcat(name,"BMW");
 	strcat(color, "red");
-	car->init(name, 100, color, 0, 0, 0);
+	car->init(name, 100, color, 0, 0, 0); //инициализируем поля объекта
 	car->displayDataCar();
-	car->addBenzine(10);
+	car->startEngine(); //пытаемся завести двигатель
 	car->displayDataCar();
-	
+	car->addBenzine(10); //добавляем бензин
+	car->displayDataCar();
+	car->startEngine(); //снова пытаемся завести двигатель
+	car->displayDataCar();
+	for (int i = 0; i < 4; i++) {
+		car->addSpeed(i*5); //добавляем скорость
+		car->displayDataCar();
+	}
+	for (int i = 0; i < 4; i++) {
+		car->reduceSpeed(i*5); //убавляем скорость
+		car->displayDataCar();
+	}
+
+	car->stopEngine(); //останавливаем двигатель
+	car->displayDataCar();
+	//free(car);
+	_getch();
 	_getch();
 	return 0;
 }
