@@ -42,7 +42,7 @@ private:
 	int benzine;
 };
 
-Car* car = new Car;
+
 
 void Car::init(char* name, int price, char* color, int engineRPM, int speed, int benzine)
 {
@@ -69,7 +69,7 @@ void Car::displayDataCar()
 void Car::addBenzine(int liters)
 {
 	std::cout << liters << "lit. benzine added!" << std::endl;
-	car->benzine += liters;
+	this->benzine += liters;
 }
 
 void Car::startEngine()
@@ -107,8 +107,8 @@ void Car::addSpeed(int speed)
 
 void Car::reduceSpeed(int speed)
 {
-	if (car->speed > 0) {
-		car->speed -= speed;
+	if (this->speed > 0) {
+		this->speed -= speed;
 		std::cout << "Car speeded down!" << std::endl;
 	}
 	else {
@@ -117,8 +117,12 @@ void Car::reduceSpeed(int speed)
 }
 
 int main()
+
 {
-	char name[] = "", color[] = "";
+	Car* car;
+	car = new Car; // выделение памяти для объекта
+
+	char name[100] = "", color[100] = "";
 	strcat(name,"BMW");
 	strcat(color, "red");
 	car->init(name, 100, color, 0, 0, 0); //инициализируем поля объекта
@@ -140,9 +144,9 @@ int main()
 
 	car->stopEngine(); //останавливаем двигатель
 	car->displayDataCar();
-	//free(car);
-	_getch();
-	_getch();
+	
+	delete car;
+
 	return 0;
 }
 
