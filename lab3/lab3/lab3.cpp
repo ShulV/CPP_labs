@@ -147,7 +147,7 @@ int main()
 	char name[100] = "", color[100] = "";
 	static_obj_car.init(name, 0, color, 0, 0, 0); //инициализируем поля объекта
 	static_obj_car.displayDataCar();
-	//static_obj_car.readCarData();
+	static_obj_car.readCarData();
 	static_obj_car.displayDataCar();
 	static_obj_car.startEngine(); //пытаемся завести двигатель
 	static_obj_car.displayDataCar();
@@ -199,9 +199,6 @@ int main()
 	delete dynamic_obj_car;
 	
 
-	std::cout << "\n\nPress key to continue!\n\n";
-	_getch();
-	std::system("cls");
 	///////////////////////////////////DYNAMIC OBJECTS ARRAY///
 	Car *dynamic_obj_cars;
 	dynamic_obj_cars = new Car[5];
@@ -215,8 +212,9 @@ int main()
 	dynamic_obj_car3 = (Car*)calloc(CAR_NUMBERS, sizeof(Car));
 	free(dynamic_obj_car3);
 	//////////////////////////////////REALOC - change current allocated memory
-	dynamic_obj_car3 = (Car*)realloc(dynamic_obj_car3, 2*CAR_NUMBERS *sizeof(Car));
-	free(dynamic_obj_car3);
+	Car *dynamic_obj_car4 = (Car*)calloc(1, sizeof(Car));
+	dynamic_obj_car4 = (Car*)realloc(dynamic_obj_car4, CAR_NUMBERS*sizeof(Car));
+	free(dynamic_obj_car4);
 
 
 	return 0;
