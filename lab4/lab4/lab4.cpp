@@ -25,6 +25,21 @@
 #define clear(stream) rewind((stream)) //очистка потока
 #define CAR_NUMBERS 10
 
+class Engine
+{
+public:
+	void setEngineRPM(int engineRPM);
+	void setQuantityOfStrokes(int quantityOfStrokes);
+	void setQuantityOfCylinders(int quantityOfCylinders);
+	int getEngineRPM();
+	int getQuantityOfStrokes();
+	int getQuantityOfCylinders();
+private:
+	int quantityOfStrokes; //количество тактов
+	int quantityOfCylinders; //количество цилиндров
+	int engineRPM; //количество оборотов в минуту
+
+};
 
 class Car
 {
@@ -41,9 +56,9 @@ private:
 	char* name;
 	int price;
 	char* color;
-	int engineRPM;
 	int speed;
 	int benzine;
+	Engine *engine;
 };
 
 void Car::init(char* name, int price, char* color, int engineRPM, int speed, int benzine)
@@ -51,13 +66,14 @@ void Car::init(char* name, int price, char* color, int engineRPM, int speed, int
 	this->name = name;
 	this->price = price;
 	this->color = color;
-	this->engineRPM = engineRPM;
+	this->engine->setEngineRPM(engineRPM);
 	this->benzine = benzine;
 	this->speed = speed;
 	printf("Car initialized!\n");
 }
 
 void Car::readCarData() {
+	int number;
 	std::cout << "ENTER CAR DATA:" << std::endl;
 	std::cout << "\tname:\t";
 	std::cin >> this->name;
@@ -69,7 +85,16 @@ void Car::readCarData() {
 	std::cin >> this->color;
 	clear(stdin);
 	std::cout << "\tengineRPM:\t";
-	std::cin >> this->engineRPM;
+	std::cin >> number;
+	this->engine->setEngineRPM(number);
+	clear(stdin);
+	std::cout << "\tquantity of cylinders:\t";
+	std::cin >> number;
+	this->engine->setQuantityOfCylinders(number);
+	clear(stdin);
+	std::cout << "\tquantity of strokes:\t";
+	std::cin >> number;
+	this->engine->setQuantityOfStrokes(number);
 	clear(stdin);
 	std::cout << "\tspeed:\t";
 	std::cin >> this->speed;
@@ -85,7 +110,7 @@ void Car::displayDataCar()
 	std::cout << "\t\tName:\t" << this->name << std::endl;
 	std::cout << "\t\tPrice:\t" << this->price << std::endl;
 	std::cout << "\t\tColor:\t" << this->color << std::endl;
-	std::cout << "\t\tEngineRPM:\t" << this->engineRPM << std::endl;
+	std::cout << "\t\tEngineRPM:\t" << this->engine->getEngineRPM()<< std::endl;
 	std::cout << "\t\tBenzine:\t" << this->benzine << std::endl;
 	std::cout << "\t\tSpeed:\t" << this->speed << std::endl;
 }
@@ -99,7 +124,7 @@ void Car::addBenzine(int liters)
 void Car::startEngine()
 {
 	if (this->benzine > 0) {
-		this->engineRPM = 800;
+		this->engine->setEngineRPM(800);
 		std::cout << "Engine started!" << std::endl;
 	}
 	else {
@@ -109,8 +134,8 @@ void Car::startEngine()
 
 void Car::stopEngine()
 {
-	if (this->engineRPM > 0) {
-		this->engineRPM = 0;
+	if (this->engine->getEngineRPM() > 0) {
+		this->engine->setEngineRPM(0);
 		std::cout << "Engine stopped!" << std::endl;
 	}
 	else {
@@ -120,7 +145,7 @@ void Car::stopEngine()
 
 void Car::addSpeed(int speed)
 {
-	if (this->engineRPM > 0) {
+	if (this->engine->getEngineRPM() > 0) {
 		this->speed += speed;
 		std::cout << "Car speeded up!" << std::endl;
 	}
@@ -228,4 +253,32 @@ int main()
 	return 0;
 }
 
+void Engine::setEngineRPM(int engineRPM)
+{
+	this->engineRPM = engineRPM;
+}
 
+void Engine::setQuantityOfStrokes(int quantityOfStrokes)
+{
+	this->quantityOfStrokes = quantityOfStrokes;
+}
+
+void Engine::setQuantityOfCylinders(int quantityOfCylinders)
+{
+	this->quantityOfCylinders = quantityOfCylinders;
+}
+
+int Engine::getEngineRPM()
+{
+	return this->engineRPM;
+}
+
+int Engine::getQuantityOfStrokes()
+{
+	return this->quantityOfStrokes;
+}
+
+int Engine::getQuantityOfCylinders()
+{
+	return this->quantityOfCylinders;
+}
