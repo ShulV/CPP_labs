@@ -19,7 +19,9 @@
 */
 #define _CRT_SECURE_NO_WARNINGS
 #include <iostream>
+#include <malloc.h>
 #include <conio.h>
+
 #define clear(stream) rewind((stream)) //очистка потока
 #define CAR_NUMBERS 10
 
@@ -212,11 +214,17 @@ int main()
 	dynamic_obj_car3 = (Car*)calloc(CAR_NUMBERS, sizeof(Car));
 	free(dynamic_obj_car3);
 	//////////////////////////////////REALOC - change current allocated memory
-	Car *dynamic_obj_car4 = (Car*)calloc(1, sizeof(Car));
-	dynamic_obj_car4 = (Car*)realloc(dynamic_obj_car4, CAR_NUMBERS*sizeof(Car));
-	free(dynamic_obj_car4);
-
-
+	Car *dynamic_obj_car4 = (Car*)calloc(2, sizeof(Car));
+	Car* tmp;
+	if (dynamic_obj_car4 != NULL)
+	{
+		tmp = (Car*)realloc(dynamic_obj_car4, CAR_NUMBERS * sizeof(Car));
+		if (tmp != NULL)
+		{
+			dynamic_obj_car4 = tmp;
+		}
+		free(dynamic_obj_car4);
+	}
 	return 0;
 }
 
