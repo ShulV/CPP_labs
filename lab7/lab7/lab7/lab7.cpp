@@ -28,8 +28,8 @@ public:
     void setPosition(int x, int y);
 
 private:
-    int x;
-    int y;
+    int x = 0;
+    int y = 0;
 };
 
 Player::Player()
