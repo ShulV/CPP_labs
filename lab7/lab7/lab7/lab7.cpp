@@ -1,84 +1,4 @@
-﻿
-/*
-// lab7.cpp : Этот файл содержит функцию "main". Здесь начинается и заканчивается выполнение программы.
-//
-#include <iostream>
-
-
-
-
-
-
-class Player
-{
-public:
-	Player();
-	~Player();
-	void setPosition(int x, int y, int z);
-	friend void setStartPosition(Player *player);
-	void displayPosition();
-	Player operator + (Player b); // сложение двух объектов operator +
-
-private:
-	int x = 0;
-	int y = 0;
-	int z = 0;
-	int money = 0;
-};
-
-Player::Player()
-{
-}
-
-Player::~Player()
-{
-}
-
-void Player::setPosition(int x, int y, int z)
-{
-	this->x = x;
-	this->y = y;
-	this->z = z;
-}
-void Player::displayPosition()
-{
-	std::cout << "x = " << this->x << ", y = " << this->y << ", z = " << this->z << std::endl;
-}
-Player Player::operator+(Player b)
-{
-	return Player();
-}
-void setStartPosition(Player *player) {
-	player->x = 0;
-	player->y = 0;
-	player->z = 0;
-}
-int main()
-{
-
-//разумное использование this;
-Player* player = new Player;
-player->setPosition(10, 20, 150);//в функции setPosition this указывает на тот объект, у которого мы вызываем метод
-std::cout << delimiter;
-// =================================== 3 ===================================
-//Дружественная функция
-std::cout << "параметры ДО использования дружесетвенной функции" << std::endl;
-player->displayPosition();
-setStartPosition(player);
-std::cout << "параметры ПОСЛЕ использования дружесетвенной функции" << std::endl;
-player->displayPosition();
-std::cout << delimiter;
-// =================================== 4 =================================== 
-// =================================== 5 =================================== 
-// ========================================================================= 
-return 0;
-}
-
-
-
-
-*/
-// lab work №7 Shulpov Victor PI-92
+﻿// lab work №7,8 Shulpov Victor PI-92
 /*
 Реализовать работу автомобиля на примере динамической структуры.
 Поля структуры:
@@ -105,8 +25,8 @@ return 0;
 
 #define clear(stream) rewind((stream)) //очистка потока
 const int CAR_NUMBERS = 10;
-
 class Car;
+
 int* allocateArray(int size);
 int& getCallNumber();
 void setStartPosition(Car* car);
@@ -134,6 +54,16 @@ private:
 
 class Car
 {
+private:
+	int x = 0;
+	int y = 0;
+	std::string name;
+	int price;
+	std::string color;
+	int speed;
+	int benzine;
+	Engine* engine;
+	static int count;
 public:
 	Car();
 	~Car();
@@ -149,16 +79,8 @@ public:
 	Car operator+(int benzine);//перегрузка оператора +
 	Car& operator++ ();//префиксная
 	Car operator++ (int unused);
-private:
-	int x=0;
-	int y=0;
+	static int getCount();
 
-	std::string name;
-	int price;
-	std::string color;
-	int speed;
-	int benzine;
-	Engine* engine;
 };
 
 Car::Car()
@@ -171,10 +93,15 @@ Car::Car()
 	this->speed = 0;
 	this->benzine = 0;
 	this->engine = NULL;
+	if (count != NULL) count++;
+	else count = 1;
+	
+
 }
 
 Car::~Car()
 {
+	count--;
 }
 
 void Car::init(std::string name, int price, std::string color, int speed, int benzine, Engine* engine)
@@ -309,6 +236,11 @@ Car Car::operator++(int unused)
 	return car;
 }
 
+int Car::getCount()
+{
+	return count;
+}
+int Car::count = 0; // определение статической переменной-члена класса
 void Engine::init(int engineRPM, int capacity, int enginePower, int quantityOfCylinders)
 {
 	this->engineRPM = engineRPM;
@@ -363,7 +295,7 @@ int main()
 	setlocale(LC_ALL, "Russian");
 	int choice=1;
 	while (choice!=0){
-		std::cout << "\n\nВведите 1 - ПОКАЗАТЬ 4 ЛАБУ\n" << "Введите 2 - ПОКАЗАТЬ 7 ЛАБУ\n" << "Введите 0 - ВЫХОД\n" << "ваш выбор: ";
+		std::cout << "\n\nВведите 1 - ПОКАЗАТЬ 4 ЛАБУ\n" << "Введите 2 - ПОКАЗАТЬ 7 ЛАБУ\n" << "Введите 3 - ПОКАЗАТЬ 8 ЛАБУ\n" << "Введите 0 - ВЫХОД\n" << "ваш выбор: ";
 		std::cin >> choice;
 		std::cout << std::endl;
 		if (choice == 0) { break; }
@@ -476,8 +408,15 @@ int main()
 			
 
 		}
-
-
+		if (choice == 3) {
+			std::cout << "count =" << Car::getCount() << "\n";
+			Car car1;
+			std::cout << "После создания одного статического объекта Car\ncount =" << Car::getCount() << "\n";
+			Car *car2 = new Car();
+			std::cout << "После создания одного динамического объекта Car\ncount =" << Car::getCount() << "\n";
+			Car car[5];
+			std::cout << "После создания массива из 5 статических объектов Car\ncount =" << Car::getCount() << "\n";
+		}
 
 
 	}
