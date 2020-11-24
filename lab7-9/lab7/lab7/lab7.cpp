@@ -69,7 +69,7 @@ private:
 public:
 	Car();
 	Car(std::string name, int price, std::string color, int speed, int benzine, Engine* engine);
-	Car(Engine* engine);
+	Car(std::string name);
 	~Car();
 	
 	void readCarData();
@@ -83,7 +83,9 @@ public:
 	Car operator+(int benzine);//перегрузка оператора +
 	Car& operator++ ();//префиксная
 	Car operator++ (int unused);
+	Car& operator= (const Car& other_car);//перегрузка оператора присваивания
 	static int getCount();
+	Car(const Car& other_car);
 
 };
 
@@ -102,17 +104,16 @@ Car::Car()
 	
 
 }
-
-Car::Car(Engine* engine)
+Car::Car(std::string name)
 {
 	this->x = 0;
 	this->y = 0;
-	this->name = "";
+	this->name = name;
 	this->price = 0;
 	this->color = "";
 	this->speed = 0;
 	this->benzine = 0;
-	this->engine = engine;
+	this->engine = NULL;
 	if (count != NULL) count++;
 	else count = 1;
 }
@@ -177,12 +178,14 @@ void Car::displayDataCar()
 	std::cout << "\t\tName:\t" << this->name << std::endl;
 	std::cout << "\t\tPrice:\t" << this->price << std::endl;
 	std::cout << "\t\tColor:\t" << this->color << std::endl;
-	std::cout << "\t\tEngineRPM:\t" << this->engine->getEngineRPM() << std::endl;
-	std::cout << "\t\tCapacity:\t" << this->engine->getCapacity() << std::endl;
-	std::cout << "\t\tEngine Power:\t" << this->engine->getEnginePower() << std::endl;
-	std::cout << "\t\tQuanity of cylinders:\t" << this->engine->getQuantityOfCylinders() << std::endl;
 	std::cout << "\t\tBenzine:\t" << this->benzine << std::endl;
 	std::cout << "\t\tSpeed:\t" << this->speed << std::endl;
+	//ENGINE
+	//std::cout << "\t\tEngineRPM:\t" << this->engine->getEngineRPM() << std::endl;
+	//std::cout << "\t\tCapacity:\t" << this->engine->getCapacity() << std::endl;
+	//std::cout << "\t\tEngine Power:\t" << this->engine->getEnginePower() << std::endl;
+	//std::cout << "\t\tQuanity of cylinders:\t" << this->engine->getQuantityOfCylinders() << std::endl;
+	
 
 }
 
@@ -256,10 +259,35 @@ Car Car::operator++(int unused)
 	return car;
 }
 
+Car& Car::operator=(const Car& other_car)
+{
+	if (this->engine != nullptr) {
+		delete[] this->engine;
+	}
+	this->benzine = other_car.benzine;
+	this->color = other_car.color;
+	this->name = other_car.name;
+	this->price = other_car.price;
+	this->engine = new Engine();
+	this->engine = other_car.engine;
+	return *this;
+}
+
 int Car::getCount()
 {
 	return count;
 }
+
+Car::Car(const Car& other_car)
+{
+	this->benzine = other_car.benzine;
+	this->color = other_car.color;
+	this->name = other_car.name;
+	this->price = other_car.price;
+	this->engine = new Engine();
+	this->engine = other_car.engine;
+}
+
 int Car::count = 0; // определение статической переменной-члена класса
 Engine::Engine(int engineRPM, int capacity, int enginePower, int quantityOfCylinders)
 {
@@ -331,7 +359,7 @@ int main()
 	setlocale(LC_ALL, "Russian");
 	int choice=1;
 	while (choice!=0){
-		std::cout << "\n\nВведите 1 - ПОКАЗАТЬ 4 ЛАБУ\n" << "Введите 2 - ПОКАЗАТЬ 7 ЛАБУ\n" << "Введите 3 - ПОКАЗАТЬ 8 ЛАБУ\n" << "Введите 0 - ВЫХОД\n" << "ваш выбор: ";
+		std::cout << "\n\nВведите 1 - ПОКАЗАТЬ 4 ЛАБУ\n" << "Введите 2 - ПОКАЗАТЬ 7 ЛАБУ\n" << "Введите 3 - ПОКАЗАТЬ 8 ЛАБУ\n" << "Введите 4 - ПОКАЗАТЬ 9 ЛАБУ\n" << "Введите 0 - ВЫХОД\n" << "ваш выбор: ";
 		std::cin >> choice;
 		std::cout << std::endl;
 		if (choice == 0) { break; }
@@ -459,6 +487,48 @@ int main()
 			std::cout << "После создания массива из 5 статических объектов Car\ncount =" << Car::getCount() << "\n";
 		}
 		if (choice == 4) {
+			//////////////////////////////////////STATIC OBJECT////////
+			std::cout << "\n\nSTATIC OBJECT\n\n";
+			Engine* bmw_engine = new Engine(0, 4395, 625, 8);
+			Car bmw_x6("BMW_X6", 3500000, "black", 0, 0, bmw_engine);//инициализируем поля объекта в конструкторе со всеми параметрами
+			Car some_car("volvo");//инициализируем поля объекта в конструкторе с 1 параметром
+			Car empty_car;//без параметров
+			std::cout << "инициализировано всеми параметрами\n";
+			bmw_x6.displayDataCar();
+			std::cout << "инициализировано только одним параметром - двигатель\n";
+			some_car.displayDataCar();
+			std::cout << "инициализировано без параметров\n";
+			empty_car.displayDataCar();
+
+			std::cout << "\n\nDYNAMIC OBJECT\n\n";
+			Engine* audi_engine = new Engine(0, 2995, 340, 6);
+			Car* audi_a7 = new Car("audi", 2000000, "blue", 0, 0, audi_engine);//инициализируем поля объекта в конструкторе со всеми параметрами
+			Car* some_car_dynamic = new Car("KIA");
+			Car* empty_car_dynamic = new Car();//без параметров
+			std::cout << "инициализировано всеми параметрами\n";
+			audi_a7->displayDataCar();
+			std::cout << "инициализировано только одним параметром - двигатель\n";
+			some_car_dynamic->displayDataCar();
+			std::cout << "инициализировано без параметров\n";
+			empty_car_dynamic->displayDataCar();
+
+			std::cout << "массив объектов\n";
+			Car* car_array[3];
+			for (int i = 0; i < 3; i++) {
+				
+				car_array[i] = new Car("Car");
+				car_array[i]->displayDataCar();
+			}
+			std::cout << "конструтор копирования\n";
+			Car copy_car1(bmw_x6);
+			copy_car1.displayDataCar();
+			bmw_x6.addBenzine(25);
+			Car copy_car2 = bmw_x6;
+			copy_car2.displayDataCar();
+			//мелкое копирование работает хорошо, когда не заимодействована динамическая память
+			//глубокое копирование нужно для того, чтобы поля-указатели объектов не ссылались на одно и то же место в памяте (куче)
+			//при глубоком копировании поля=указатели нового объекта получают новое место другое место в памяти
+			//иначе поле одного объекта изменялось при изменении поля другого объекта
 
 		}
 
