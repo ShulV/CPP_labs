@@ -35,6 +35,8 @@ class Engine
 {
 public:
 	Engine(int engineRPM, int capacity, int enginePower, int quantityOfCylinders);
+	Engine(int engineRPM);
+	Engine();
 
 	void setEngineRPM(int engineRPM);
 	void setCapacity(int capacity);
@@ -66,8 +68,10 @@ private:
 	static int count;
 public:
 	Car();
+	Car(std::string name, int price, std::string color, int speed, int benzine, Engine* engine);
+	Car(Engine* engine);
 	~Car();
-	void init(std::string name, int price, std::string color, int speed, int benzine, Engine* engine);
+	
 	void readCarData();
 	void displayDataCar();
 	void addBenzine(int liters);
@@ -99,12 +103,20 @@ Car::Car()
 
 }
 
-Car::~Car()
+Car::Car(Engine* engine)
 {
-	count--;
+	this->x = 0;
+	this->y = 0;
+	this->name = "";
+	this->price = 0;
+	this->color = "";
+	this->speed = 0;
+	this->benzine = 0;
+	this->engine = engine;
+	if (count != NULL) count++;
+	else count = 1;
 }
-
-void Car::init(std::string name, int price, std::string color, int speed, int benzine, Engine* engine)
+Car::Car(std::string name, int price, std::string color, int speed, int benzine, Engine* engine)
 {
 	this->name = name;
 	this->price = price;
@@ -112,8 +124,16 @@ void Car::init(std::string name, int price, std::string color, int speed, int be
 	this->benzine = benzine;
 	this->speed = speed;
 	this->engine = engine;
+	if (count != NULL) count++;
+	else count = 1;
 	printf("Car initialized!\n");
 }
+Car::~Car()
+{
+	count--;
+}
+
+
 
 void Car::readCarData() {
 	int number;
@@ -249,6 +269,22 @@ Engine::Engine(int engineRPM, int capacity, int enginePower, int quantityOfCylin
 	this->quantityOfCylinders = quantityOfCylinders;
 }
 
+Engine::Engine(int engineRPM)
+{
+	this->engineRPM = engineRPM;
+	this->capacity = 0;
+	this->enginePower = 0;
+	this->quantityOfCylinders = 0;
+}
+
+Engine::Engine()
+{
+	this->engineRPM = 0;
+	this->capacity = 0;
+	this->enginePower = 0;
+	this->quantityOfCylinders = 0;
+}
+
 void Engine::setEngineRPM(int engineRPM)
 {
 	this->engineRPM = engineRPM;
@@ -303,8 +339,8 @@ int main()
 			//////////////////////////////////////STATIC OBJECT////////
 			std::cout << "\n\nSTATIC OBJECT\n\n";
 			Engine* bmw_engine = new Engine(0, 4395, 625, 8);
-			Car bmw_x6;
-			bmw_x6.init("BMW_X6", 3500000, "black", 0, 0, bmw_engine); //инициализируем поля объекта
+			Car bmw_x6("BMW_X6", 3500000, "black", 0, 0, bmw_engine);//инициализируем поля объекта в конструкторе
+			
 			bmw_x6.displayDataCar();
 			//bmw_x6.readCarData();
 			bmw_x6.displayDataCar();
@@ -331,9 +367,10 @@ int main()
 			std::system("cls");
 			////////////////////////////////////DYNAMIC OBJECT/////
 			std::cout << "\n\nDYNAMIC OBJECT\n\n";
-			Car* audi_a7 = new Car;
 			Engine* audi_engine = new Engine(0, 2995, 340, 6);
-			audi_a7->init("audi", 2000000, "blue", 0, 0, audi_engine); //инициализируем поля объекта
+			Car* audi_a7 = new Car("audi", 2000000, "blue", 0, 0, audi_engine);//инициализируем поля объекта
+			
+			 
 			audi_a7->displayDataCar();
 			//audi_a7->readCarData();
 			audi_a7->displayDataCar();
@@ -393,8 +430,8 @@ int main()
 			std::cout << "Количество вызовов функции: " << getCallNumber() << "\n";
 			//перегрузка
 			Engine* bmw_engine = new Engine(0, 4395, 625, 8);
-			Car bmw_x6, test_car;
-			bmw_x6.init("BMW_X6", 3500000, "black", 0, 10, bmw_engine); //инициализируем поля объекта
+			Car bmw_x6("BMW_X6", 3500000, "black", 0, 10, bmw_engine); //инициализируем поля объекта
+			Car test_car;
 			bmw_x6.displayDataCar();
 			bmw_x6 = bmw_x6 + 10;//перегрузка оператора + (добавляем бензин)
 			std::cout << "BMW" << "\n";
@@ -420,6 +457,9 @@ int main()
 			std::cout << "После создания одного динамического объекта Car\ncount =" << Car::getCount() << "\n";
 			Car car[5];
 			std::cout << "После создания массива из 5 статических объектов Car\ncount =" << Car::getCount() << "\n";
+		}
+		if (choice == 4) {
+
 		}
 
 
