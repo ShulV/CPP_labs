@@ -1,4 +1,4 @@
-﻿// lab work №7,8 Shulpov Victor PI-92
+﻿// lab work №7,8,9 Shulpov Victor PI-92
 /*
 Реализовать работу автомобиля на примере динамической структуры.
 Поля структуры:
@@ -34,7 +34,7 @@ void setStartPosition(Car* car);
 class Engine
 {
 public:
-	void init(int engineRPM, int capacity, int enginePower, int quantityOfCylinders);
+	Engine(int engineRPM, int capacity, int enginePower, int quantityOfCylinders);
 
 	void setEngineRPM(int engineRPM);
 	void setCapacity(int capacity);
@@ -241,7 +241,7 @@ int Car::getCount()
 	return count;
 }
 int Car::count = 0; // определение статической переменной-члена класса
-void Engine::init(int engineRPM, int capacity, int enginePower, int quantityOfCylinders)
+Engine::Engine(int engineRPM, int capacity, int enginePower, int quantityOfCylinders)
 {
 	this->engineRPM = engineRPM;
 	this->capacity = capacity;
@@ -302,8 +302,7 @@ int main()
 		if (choice == 1) {
 			//////////////////////////////////////STATIC OBJECT////////
 			std::cout << "\n\nSTATIC OBJECT\n\n";
-			Engine* bmw_engine = new Engine;
-			bmw_engine->init(0, 4395, 625, 8);
+			Engine* bmw_engine = new Engine(0, 4395, 625, 8);
 			Car bmw_x6;
 			bmw_x6.init("BMW_X6", 3500000, "black", 0, 0, bmw_engine); //инициализируем поля объекта
 			bmw_x6.displayDataCar();
@@ -333,8 +332,7 @@ int main()
 			////////////////////////////////////DYNAMIC OBJECT/////
 			std::cout << "\n\nDYNAMIC OBJECT\n\n";
 			Car* audi_a7 = new Car;
-			Engine* audi_engine = new Engine;
-			audi_engine->init(0, 2995, 340, 6);
+			Engine* audi_engine = new Engine(0, 2995, 340, 6);
 			audi_a7->init("audi", 2000000, "blue", 0, 0, audi_engine); //инициализируем поля объекта
 			audi_a7->displayDataCar();
 			//audi_a7->readCarData();
@@ -394,18 +392,24 @@ int main()
 			//возврат значения из метода через ссылку(&)
 			std::cout << "Количество вызовов функции: " << getCallNumber() << "\n";
 			//перегрузка
-			Engine* bmw_engine = new Engine;
-			bmw_engine->init(0, 4395, 625, 8);
-			Car bmw_x6;
+			Engine* bmw_engine = new Engine(0, 4395, 625, 8);
+			Car bmw_x6, test_car;
 			bmw_x6.init("BMW_X6", 3500000, "black", 0, 10, bmw_engine); //инициализируем поля объекта
 			bmw_x6.displayDataCar();
 			bmw_x6 = bmw_x6 + 10;//перегрузка оператора + (добавляем бензин)
+			std::cout << "BMW" << "\n";
 			bmw_x6.displayDataCar();
-			bmw_x6 = ++bmw_x6; //(добавляем бензин)
+
+			test_car = ++bmw_x6;
+			std::cout << "BMW" << "\n";
 			bmw_x6.displayDataCar();
-			bmw_x6 = bmw_x6++; //(добавляем бензин)
+			std::cout << "TEST_CAR" << "\n";
+			test_car.displayDataCar();
+			test_car = bmw_x6++; //(добавляем бензин)
+			std::cout << "BMW" << "\n";
 			bmw_x6.displayDataCar();
-			
+			std::cout << "TEST_CAR" << "\n";
+			test_car.displayDataCar();
 
 		}
 		if (choice == 3) {
