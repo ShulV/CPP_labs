@@ -57,6 +57,9 @@ private:
 class Car
 {
 private:
+	int* p;//для демонстрации глубокого копирования
+	int size;//для демонстрации глубокого копирования
+	
 	int x = 0;
 	int y = 0;
 	std::string name;
@@ -89,8 +92,28 @@ public:
 
 };
 
+Car::Car(const Car& other_car)
+{
+	//ГЛУБОКОЕ КОПИРОВАНИЕ
+	p = new int[other_car.size];
+	if (!p) exit(1);
+	for (int i = 0; i < other_car.size; i++) p[i] = other_car.p[i];
+
+	this->benzine = other_car.benzine;
+	this->color = other_car.color;
+	this->name = other_car.name;
+	this->price = other_car.price;
+	this->engine = new Engine(*(other_car.engine));
+	if (count != NULL) count++;
+	else count = 1;
+	std::cout << "\t\t\t" << "ВЫЗВАЛСЯ КОНСТРУКТОР КОПИРОВАНИЯ : " << this << std::endl;
+}
+
 Car::Car()
 {
+	this->size = 10;//для демонстрации глубокого копирования
+	p = new int[size];//для демонстрации глубокого копирования
+	
 	this->x = 0;
 	this->y = 0;
 	this->name = "";
@@ -101,11 +124,15 @@ Car::Car()
 	this->engine = NULL;
 	if (count != NULL) count++;
 	else count = 1;
-	
+	std::cout << "\t\t\t" << "ВЫЗВАЛСЯ КОНСТРУКТОР БЕЗ ПАРАМЕТРОВ : " << this << std::endl;
 
 }
+
 Car::Car(std::string name)
 {
+	this->size = 10;//для демонстрации глубокого копирования
+	p = new int[size];//для демонстрации глубокого копирования
+
 	this->x = 0;
 	this->y = 0;
 	this->name = name;
@@ -116,9 +143,14 @@ Car::Car(std::string name)
 	this->engine = NULL;
 	if (count != NULL) count++;
 	else count = 1;
+	std::cout << "\t\t\t" << "ВЫЗВАЛСЯ КОНСТРУКТОР С ОДНИМ ПАРАМЕТРОМ : " << this << std::endl;
 }
+
 Car::Car(std::string name, int price, std::string color, int speed, int benzine, Engine* engine)
 {
+	this->size = 10;//для демонстрации глубокого копирования
+	p = new int[size];//для демонстрации глубокого копирования
+
 	this->name = name;
 	this->price = price;
 	this->color = color;
@@ -127,14 +159,16 @@ Car::Car(std::string name, int price, std::string color, int speed, int benzine,
 	this->engine = engine;
 	if (count != NULL) count++;
 	else count = 1;
-	printf("Car initialized!\n");
+	std::cout << "\t\t\t" << "ВЫЗВАЛСЯ КОНСТРУКТОР СО ВСЕМИ ПАРАМЕТРАМИ : " << this << std::endl;
 }
+
 Car::~Car()
 {
+	delete[] p;//для демонстрации глубокого копирования
+
 	count--;
+	std::cout << "\t\t\t" << "ВЫЗВАЛСЯ ДЕКОНСТРУКТОР : " << this << std::endl;
 }
-
-
 
 void Car::readCarData() {
 	int number;
@@ -278,16 +312,6 @@ int Car::getCount()
 	return count;
 }
 
-Car::Car(const Car& other_car)
-{
-	this->benzine = other_car.benzine;
-	this->color = other_car.color;
-	this->name = other_car.name;
-	this->price = other_car.price;
-	this->engine = new Engine();
-	this->engine = other_car.engine;
-}
-
 int Car::count = 0; // определение статической переменной-члена класса
 Engine::Engine(int engineRPM, int capacity, int enginePower, int quantityOfCylinders)
 {
@@ -351,6 +375,10 @@ int Engine::getEnginePower()
 int Engine::getQuantityOfCylinders()
 {
 	return this->quantityOfCylinders;
+}
+
+void Foo(Car car) {
+	std::cout << "вызвана функция с параметром-объектом класса Car. Адрес переданного объекта : " << &car << "\n";
 }
 
 int main()
@@ -494,42 +522,56 @@ int main()
 			Car some_car("volvo");//инициализируем поля объекта в конструкторе с 1 параметром
 			Car empty_car;//без параметров
 			std::cout << "инициализировано всеми параметрами\n";
-			bmw_x6.displayDataCar();
+			//bmw_x6.displayDataCar();
 			std::cout << "инициализировано только одним параметром - двигатель\n";
-			some_car.displayDataCar();
+			//some_car.displayDataCar();
 			std::cout << "инициализировано без параметров\n";
-			empty_car.displayDataCar();
-
+			//empty_car.displayDataCar();
+			
 			std::cout << "\n\nDYNAMIC OBJECT\n\n";
 			Engine* audi_engine = new Engine(0, 2995, 340, 6);
 			Car* audi_a7 = new Car("audi", 2000000, "blue", 0, 0, audi_engine);//инициализируем поля объекта в конструкторе со всеми параметрами
 			Car* some_car_dynamic = new Car("KIA");
 			Car* empty_car_dynamic = new Car();//без параметров
 			std::cout << "инициализировано всеми параметрами\n";
-			audi_a7->displayDataCar();
+			//audi_a7->displayDataCar();
 			std::cout << "инициализировано только одним параметром - двигатель\n";
-			some_car_dynamic->displayDataCar();
+			//some_car_dynamic->displayDataCar();
 			std::cout << "инициализировано без параметров\n";
-			empty_car_dynamic->displayDataCar();
-
+			delete audi_a7;
+			delete some_car_dynamic;
+			delete empty_car_dynamic;
+			//empty_car_dynamic->displayDataCar();
+			
 			std::cout << "массив объектов\n";
-			Car* car_array[3];
+			Car* car_array = new Car[3];
 			for (int i = 0; i < 3; i++) {
 				
-				car_array[i] = new Car("Car");
-				car_array[i]->displayDataCar();
+				//car_array[i] = Car("Car");
+				//car_array[i]->displayDataCar();
 			}
-			std::cout << "конструтор копирования\n";
-			Car copy_car1(bmw_x6);
-			copy_car1.displayDataCar();
-			bmw_x6.addBenzine(25);
-			Car copy_car2 = bmw_x6;
-			copy_car2.displayDataCar();
+			delete[] car_array;
+			
+			std::cout << "вызывается конструктор копирования\n";
+			Car copy_car1(bmw_x6);//глубокое копирование
+			Foo(bmw_x6);//глубокое копирвоание
+
+			*bmw_engine = Engine(*audi_engine);//мелкое копирование
+			//copy_car1.displayDataCar();
+			//bmw_x6.addBenzine(25);
+			//Car copy_car2 = bmw_x6;
+			//copy_car2.displayDataCar();
+
+			//Глубокая копия копирует все поля и создает копии динамически выделенной памяти, на которую указывают поля.
+			//Глубокое копирование происходит, когда объект копируется вместе с объектами, на которые он ссылается.
+			//Мелкая копия - это битовая копия объекта.Создается новый объект, который имеет точную копию значений в исходном объекте.
+			//Если какие - либо поля объекта являются ссылками на другие объекты, копируются только ссылочные адреса, т.е.копируется только адрес памяти, а не фактические объекты.
+			
 			//мелкое копирование работает хорошо, когда не заимодействована динамическая память
 			//глубокое копирование нужно для того, чтобы поля-указатели объектов не ссылались на одно и то же место в памяте (куче)
 			//при глубоком копировании поля=указатели нового объекта получают новое место другое место в памяти
 			//иначе поле одного объекта изменялось при изменении поля другого объекта
-
+			std::cout << "выход из функции\n";
 		}
 
 
