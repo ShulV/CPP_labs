@@ -39,7 +39,7 @@ private:
 	std::string m_error;
 
 public:
-	NegativeNumberException(std::string error): m_error(error)
+	NegativeNumberException(std::string error) : m_error(error)
 	{
 		std::cout << "\t" << "Была совершена попытка разгона автомобиля выше максимальной скорости" << std::endl;
 	}
