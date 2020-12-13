@@ -22,6 +22,7 @@
 #include <malloc.h>
 #include <conio.h>
 #include <string.h>
+#include <exception> // для std::exception
 
 #define clear(stream) rewind((stream)) //очистка потока
 const int CAR_NUMBERS = 10;
@@ -30,6 +31,20 @@ class Car;
 int* allocateArray(int size);
 int& getCallNumber();
 void setStartPosition(Car* car);
+
+
+class NegativeNumberException : public std::exception
+{
+private:
+	std::string m_error;
+
+public:
+	NegativeNumberException(std::string error): m_error(error)
+	{
+		std::cout << "\t" << "Была совершена попытка разгона автомобиля выше максимальной скорости" << std::endl;
+	}
+	const char* what() const noexcept { return m_error.c_str(); } // C++11 и выше
+};
 
 class Engine
 {
@@ -66,12 +81,14 @@ private:
 	int price;
 	std::string color;
 	int speed;
+	int max_speed;
 	int benzine;
 	Engine* engine;
 	static int count;
 public:
 	Car();
 	Car(std::string name, int price, std::string color, int speed, int benzine, Engine* engine);
+	Car(std::string name, int price, std::string color, int speed, int benzine, int max_speed, Engine* engine);
 	Car(std::string name);
 	~Car();
 	
@@ -104,6 +121,7 @@ Car::Car(const Car& other_car)
 	this->name = other_car.name;
 	this->price = other_car.price;
 	this->engine = new Engine(*(other_car.engine));
+	this->max_speed = other_car.max_speed;
 	if (count != NULL) count++;
 	else count = 1;
 	std::cout << "\t\t\t" << "ВЫЗВАЛСЯ КОНСТРУКТОР КОПИРОВАНИЯ : " << this << std::endl;
@@ -122,6 +140,7 @@ Car::Car()
 	this->speed = 0;
 	this->benzine = 0;
 	this->engine = NULL;
+	this->max_speed = 0;
 	if (count != NULL) count++;
 	else count = 1;
 	std::cout << "\t\t\t" << "ВЫЗВАЛСЯ КОНСТРУКТОР БЕЗ ПАРАМЕТРОВ : " << this << std::endl;
@@ -141,6 +160,7 @@ Car::Car(std::string name)
 	this->speed = 0;
 	this->benzine = 0;
 	this->engine = NULL;
+	this->max_speed = 0;
 	if (count != NULL) count++;
 	else count = 1;
 	std::cout << "\t\t\t" << "ВЫЗВАЛСЯ КОНСТРУКТОР С ОДНИМ ПАРАМЕТРОМ : " << this << std::endl;
@@ -157,6 +177,23 @@ Car::Car(std::string name, int price, std::string color, int speed, int benzine,
 	this->benzine = benzine;
 	this->speed = speed;
 	this->engine = engine;
+	this->max_speed = 0;
+	if (count != NULL) count++;
+	else count = 1;
+	std::cout << "\t\t\t" << "ВЫЗВАЛСЯ КОНСТРУКТОР С ПОЧТИ ВСЕМИ ПАРАМЕТРАМИ : " << this << std::endl;
+}
+
+Car::Car(std::string name, int price, std::string color, int speed, int benzine, int max_speed, Engine* engine)
+{
+	this->size = 10;//для демонстрации глубокого копирования
+	p = new int[size];//для демонстрации глубокого копирования
+	this->name = name;
+	this->price = price;
+	this->color = color;
+	this->benzine = benzine;
+	this->speed = speed;
+	this->engine = engine;
+	this->max_speed = max_speed;
 	if (count != NULL) count++;
 	else count = 1;
 	std::cout << "\t\t\t" << "ВЫЗВАЛСЯ КОНСТРУКТОР СО ВСЕМИ ПАРАМЕТРАМИ : " << this << std::endl;
@@ -253,7 +290,9 @@ void Car::stopEngine()
 
 void Car::addSpeed(int speed)
 {
+	
 	if (this->engine->getEngineRPM() > 0) {
+		if (this->speed + speed > this->max_speed) { throw NegativeNumberException("Брошено исключение: Слишком большая скорость!\n"); }
 		this->speed += speed;
 		std::cout << "Car speeded up!" << std::endl;
 	}
@@ -265,7 +304,8 @@ void Car::addSpeed(int speed)
 void Car::reduceSpeed(int speed)
 {
 	if (this->speed > 0) {
-		this->speed -= speed;
+		if (this->speed < speed) { this->speed = 0; }
+		else { this->speed -= speed; }
 		std::cout << "Car speeded down!" << std::endl;
 	}
 	else {
@@ -387,7 +427,13 @@ int main()
 	setlocale(LC_ALL, "Russian");
 	int choice=1;
 	while (choice!=0){
-		std::cout << "\n\nВведите 1 - ПОКАЗАТЬ 4 ЛАБУ\n" << "Введите 2 - ПОКАЗАТЬ 7 ЛАБУ\n" << "Введите 3 - ПОКАЗАТЬ 8 ЛАБУ\n" << "Введите 4 - ПОКАЗАТЬ 9 ЛАБУ\n" << "Введите 0 - ВЫХОД\n" << "ваш выбор: ";
+		std::cout 
+			<< "\n\nВведите 1 - ПОКАЗАТЬ 4 ЛАБУ\n" 
+			<< "Введите 2 - ПОКАЗАТЬ 7 ЛАБУ\n"
+			<< "Введите 3 - ПОКАЗАТЬ 8 ЛАБУ\n"
+			<< "Введите 4 - ПОКАЗАТЬ 9 ЛАБУ\n"
+			<< "Введите 5 - ПОКАЗАТЬ 10 ЛАБУ\n"
+			<< "Введите 0 - ВЫХОД\n" << "ваш выбор: ";
 		std::cin >> choice;
 		std::cout << std::endl;
 		if (choice == 0) { break; }
@@ -554,9 +600,16 @@ int main()
 			
 			std::cout << "вызывается конструктор копирования\n";
 			Car copy_car1(bmw_x6);//глубокое копирование
+			//у Car объекта есть динамическое поле, поэтому с помощью конструктора копирования обеспеивается 
+			//поле-указатель получает новое место в памяти (реализовано в конструкторе копирования)
 			Foo(bmw_x6);//глубокое копирвоание
 
 			*bmw_engine = Engine(*audi_engine);//мелкое копирование
+			//у Engine объекта нет динамических полей, поэтому его копирование может быть только мелким (битовая копия)
+
+
+
+
 			//copy_car1.displayDataCar();
 			//bmw_x6.addBenzine(25);
 			//Car copy_car2 = bmw_x6;
@@ -572,6 +625,26 @@ int main()
 			//при глубоком копировании поля=указатели нового объекта получают новое место другое место в памяти
 			//иначе поле одного объекта изменялось при изменении поля другого объекта
 			std::cout << "выход из функции\n";
+		}
+		if (choice == 5) {
+			Engine* bmw_engine = new Engine(0, 4395, 625, 8);
+			Car bmw_x6("BMW_X6", 3500000, "black", 0, 20, 300, bmw_engine);//инициализируем поля объекта в конструкторе со всеми параметрами
+			try
+			{
+				bmw_x6.startEngine();
+				for (int i = 0; i < 10; i++) {
+					bmw_x6.addSpeed(40);
+				}
+				
+			}
+			catch (const NegativeNumberException& ex) {
+				std::cout << "Поймали исключение NegativeNumberException : слишком большая скорость!\n\tex.what() = " << ex.what() << "\n";
+			}
+			catch (const std::exception& ex)
+			{
+				std::cout << "Поймали исключение exception: слишком большая скорость! " << ex.what() << "\n";;
+			}
+
 		}
 
 
