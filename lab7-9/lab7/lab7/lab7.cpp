@@ -470,10 +470,10 @@ int main()
 
 {
 	setlocale(LC_ALL, "Russian");
-	int choice=1;
-	while (choice!=0){
-		std::cout 
-			<< "\n\nВведите 1 - ПОКАЗАТЬ 4 ЛАБУ\n" 
+	int choice = 1;
+	while (choice != 0) {
+		std::cout
+			<< "\n\nВведите 1 - ПОКАЗАТЬ 4 ЛАБУ\n"
 			<< "Введите 2 - ПОКАЗАТЬ 7 ЛАБУ\n"
 			<< "Введите 3 - ПОКАЗАТЬ 8 ЛАБУ\n"
 			<< "Введите 4 - ПОКАЗАТЬ 9 ЛАБУ\n"
@@ -488,7 +488,7 @@ int main()
 			std::cout << "\n\nSTATIC OBJECT\n\n";
 			Engine* bmw_engine = new Engine(0, 4395, 625, 8);
 			Car bmw_x6("BMW_X6", 3500000, "black", 0, 0, bmw_engine);//инициализируем поля объекта в конструкторе
-			
+
 			bmw_x6.displayDataCar();
 			//bmw_x6.readCarData();
 			bmw_x6.displayDataCar();
@@ -517,8 +517,8 @@ int main()
 			std::cout << "\n\nDYNAMIC OBJECT\n\n";
 			Engine* audi_engine = new Engine(0, 2995, 340, 6);
 			Car* audi_a7 = new Car("audi", 2000000, "blue", 0, 0, audi_engine);//инициализируем поля объекта
-			
-			 
+
+
 			audi_a7->displayDataCar();
 			//audi_a7->readCarData();
 			audi_a7->displayDataCar();
@@ -601,7 +601,7 @@ int main()
 			std::cout << "count =" << Car::getCount() << "\n";
 			Car car1;
 			std::cout << "После создания одного статического объекта Car\ncount =" << Car::getCount() << "\n";
-			Car *car2 = new Car();
+			Car* car2 = new Car();
 			std::cout << "После создания одного динамического объекта Car\ncount =" << Car::getCount() << "\n";
 			Car car[5];
 			std::cout << "После создания массива из 5 статических объектов Car\ncount =" << Car::getCount() << "\n";
@@ -619,7 +619,7 @@ int main()
 			//some_car.displayDataCar();
 			std::cout << "инициализировано без параметров\n";
 			//empty_car.displayDataCar();
-			
+
 			std::cout << "\n\nDYNAMIC OBJECT\n\n";
 			Engine* audi_engine = new Engine(0, 2995, 340, 6);
 			Car* audi_a7 = new Car("audi", 2000000, "blue", 0, 0, audi_engine);//инициализируем поля объекта в конструкторе со всеми параметрами
@@ -634,16 +634,16 @@ int main()
 			delete some_car_dynamic;
 			delete empty_car_dynamic;
 			//empty_car_dynamic->displayDataCar();
-			
+
 			std::cout << "массив объектов\n";
 			Car* car_array = new Car[3];
 			for (int i = 0; i < 3; i++) {
-				
+
 				//car_array[i] = Car("Car");
 				//car_array[i]->displayDataCar();
 			}
 			delete[] car_array;
-			
+
 			std::cout << "вызывается конструктор копирования\n";
 			Car copy_car1(bmw_x6);//глубокое копирование
 			//у Car объекта есть динамическое поле, поэтому с помощью конструктора копирования обеспеивается 
@@ -665,7 +665,7 @@ int main()
 			//Глубокое копирование происходит, когда объект копируется вместе с объектами, на которые он ссылается.
 			//Мелкая копия - это битовая копия объекта.Создается новый объект, который имеет точную копию значений в исходном объекте.
 			//Если какие - либо поля объекта являются ссылками на другие объекты, копируются только ссылочные адреса, т.е.копируется только адрес памяти, а не фактические объекты.
-			
+
 			//мелкое копирование работает хорошо, когда не заимодействована динамическая память
 			//глубокое копирование нужно для того, чтобы поля-указатели объектов не ссылались на одно и то же место в памяте (куче)
 			//при глубоком копировании поля=указатели нового объекта получают новое место другое место в памяти
@@ -686,7 +686,7 @@ int main()
 				for (int i = 0; i < 10; i++) {
 					bmw_x6.addSpeed(40);
 				}
-				
+
 			}
 			catch (const BigSpeedException& ex) {
 				std::cout << "Поймали исключение NegativeNumberException : слишком большая скорость!\n\tex.what() = " << ex.what() << "\n";
@@ -695,9 +695,9 @@ int main()
 			{
 				std::cout << "Поймали исключение exception " << ex.what() << "\n";
 			}
-			
+
 			int number_c = 0;
-			try{
+			try {
 				number_c = func1(20, 20);
 			}
 			catch (const OneException& ex) {
@@ -719,6 +719,7 @@ int main()
 		}
 		if (choice == 6) {
 			const int N = 4, M = 3;
+			////////////////////////////////////////////////
 			Engine* bmw_engine = new Engine(0, 4395, 625, 8);
 			Car car_array[N];
 			for (int i = 0; i < N; i++) {
@@ -729,22 +730,30 @@ int main()
 				for (int j = 0; j < M; j++) {
 					car_darray[i][j] = Car("car" + std::to_string(i * M + j));
 				}
-				
+
 			}
 			Car* d_car_array[N];
 			for (int i = 0; i < N; i++) {
 				d_car_array[i] = new Car("car" + std::to_string(i));
 			}
+			
+			//////////////////////////////////////////////////////////
 			Car* d_car_darray[N][M];
+
+
 			for (int i = 0; i < N; i++) {
 				for (int j = 0; j < M; j++) {
-					d_car_darray[i][j] = new Car("car" + std::to_string(i*M + j));
-					d_car_darray[i][j]->displayDataCar();
+					d_car_darray[i][j] = new Car("car" + std::to_string(i * M + j));
 				}
-				
-			}
-		}
 
+			}
+
+			Car* d_car_darray2 = new Car[N, M];//только прямоугольный массив
+			//Car cars[N, M]; --- error
+			/////////////////////////////////////////////////////////////
+			Car* cars[N];
+
+		}
 
 	}
 	std::cout << "Вы вышли\n";
