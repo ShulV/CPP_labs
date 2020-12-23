@@ -1,4 +1,4 @@
-﻿// lab work №7,8,9 Shulpov Victor PI-92
+﻿// lab work №7,8,9,10 Shulpov Victor PI-92
 /*
 Реализовать работу автомобиля на примере динамической структуры.
 Поля структуры:
@@ -19,10 +19,12 @@
 */
 #define _CRT_SECURE_NO_WARNINGS
 #include <iostream>
+#include <fstream>
 #include <malloc.h>
 #include <conio.h>
 #include <string.h>
 #include <exception> // для std::exception
+#include <string>
 
 #define clear(stream) rewind((stream)) //очистка потока
 const int CAR_NUMBERS = 10;
@@ -33,15 +35,41 @@ int& getCallNumber();
 void setStartPosition(Car* car);
 
 
-class NegativeNumberException : public std::exception
+class BigSpeedException : public std::exception
 {
 private:
 	std::string m_error;
 
 public:
-	NegativeNumberException(std::string error) : m_error(error)
+	BigSpeedException(std::string error) : m_error(error)
 	{
 		std::cout << "\t" << "Была совершена попытка разгона автомобиля выше максимальной скорости" << std::endl;
+	}
+	const char* what() const noexcept { return m_error.c_str(); } // C++11 и выше
+};
+
+class ZeroDivisionException : public std::exception
+{
+private:
+	std::string m_error;
+
+public:
+	ZeroDivisionException(std::string error) : m_error(error)
+	{
+		std::cout << "\t" << "Исключение! Деление на нуль!" << std::endl;
+	}
+	const char* what() const noexcept { return m_error.c_str(); } // C++11 и выше
+};
+
+class OneException : public std::exception
+{
+private:
+	std::string m_error;
+
+public:
+	OneException(std::string error) : m_error(error)
+	{
+		std::cout << "\t" << "Исключение! Получено значение 1!" << std::endl;
 	}
 	const char* what() const noexcept { return m_error.c_str(); } // C++11 и выше
 };
@@ -292,7 +320,7 @@ void Car::addSpeed(int speed)
 {
 	
 	if (this->engine->getEngineRPM() > 0) {
-		if (this->speed + speed > this->max_speed) { throw NegativeNumberException("Брошено исключение: Слишком большая скорость!\n"); }
+		if (this->speed + speed > this->max_speed) { throw BigSpeedException("Брошено исключение: Слишком большая скорость!\n"); }
 		this->speed += speed;
 		std::cout << "Car speeded up!" << std::endl;
 	}
@@ -421,6 +449,23 @@ void Foo(Car car) {
 	std::cout << "вызвана функция с параметром-объектом класса Car. Адрес переданного объекта : " << &car << "\n";
 }
 
+int func3(int num1, int num2) {
+	if (num2 == 0) throw ZeroDivisionException("Деление на нуль");
+	return num1 / num2;
+}
+
+int func2(int num1, int num2) {
+	int num = func3(num1, num2);
+	if (num == 1) throw OneException("Получена единица");
+	return num - num2;
+}
+
+int func1(int num1, int num2) {
+	int num = func2(num1, num2);
+	return num - num2;
+}
+
+
 int main()
 
 {
@@ -433,6 +478,7 @@ int main()
 			<< "Введите 3 - ПОКАЗАТЬ 8 ЛАБУ\n"
 			<< "Введите 4 - ПОКАЗАТЬ 9 ЛАБУ\n"
 			<< "Введите 5 - ПОКАЗАТЬ 10 ЛАБУ\n"
+			<< "Введите 6 - ПОКАЗАТЬ 11 ЛАБУ\n"
 			<< "Введите 0 - ВЫХОД\n" << "ваш выбор: ";
 		std::cin >> choice;
 		std::cout << std::endl;
@@ -627,6 +673,11 @@ int main()
 			std::cout << "выход из функции\n";
 		}
 		if (choice == 5) {
+			//Обработка исключений (exception handling) позволяет упорядочить обработку ошибок времени исполнения.
+			//Используя обработку исключений С++, программа может автоматически вызвать функцию-обработчик ошибок тогда, когда такая ошибка возникает.
+			//Принципиальным достоин­ством обработки исключений служит то, 
+			//что она позволяет автоматизировать большую часть кода для обработки ошибок, для чего раньше требовалось ручное кодирование.
+
 			Engine* bmw_engine = new Engine(0, 4395, 625, 8);
 			Car bmw_x6("BMW_X6", 3500000, "black", 0, 20, 300, bmw_engine);//инициализируем поля объекта в конструкторе со всеми параметрами
 			try
@@ -637,20 +688,57 @@ int main()
 				}
 				
 			}
-			catch (const NegativeNumberException& ex) {
+			catch (const BigSpeedException& ex) {
 				std::cout << "Поймали исключение NegativeNumberException : слишком большая скорость!\n\tex.what() = " << ex.what() << "\n";
 			}
 			catch (const std::exception& ex)
 			{
-				std::cout << "Поймали исключение exception: слишком большая скорость! " << ex.what() << "\n";;
+				std::cout << "Поймали исключение exception " << ex.what() << "\n";
+			}
+			
+			int number_c = 0;
+			try{
+				number_c = func1(20, 20);
+			}
+			catch (const OneException& ex) {
+				std::cout << "Вызвано исключение! " << ex.what() << "\n";
+			}
+			catch (const ZeroDivisionException& ex) {
+				std::cout << "Вызвано исключение! " << ex.what() << "\n";
+			}
+			try {
+				number_c = func1(10, 0);
+			}
+			catch (const OneException& ex) {
+				std::cout << "Вызвано исключение! " << ex.what() << "\n";
+			}
+			catch (const ZeroDivisionException& ex) {
+				std::cout << "Вызвано исключение! " << ex.what() << "\n";
 			}
 
+		}
+		if (choice == 6) {
+			const int N = 4, M = 3;
+			Engine* bmw_engine = new Engine(0, 4395, 625, 8);
+			Car car_array[N];
+			for (int i = 0; i < N; i++) {
+				car_array[i] = Car("car" + std::to_string(i));
+			}
+			Car car_darray[N][M];
+			for (int i = 0; i < N; i++) {
+				for (int j = 0; j < M; j++) {
+					car_darray[i][j] = Car("car" + std::to_string(i));
+					car_darray[i][j].displayDataCar();
+				}
+				
+			}
 		}
 
 
 	}
 	std::cout << "Вы вышли\n";
 }
+
 
 void setStartPosition(Car* car)
 {
