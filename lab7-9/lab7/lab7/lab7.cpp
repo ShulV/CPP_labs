@@ -727,8 +727,19 @@ int main()
 			Car car_darray[N][M];
 			for (int i = 0; i < N; i++) {
 				for (int j = 0; j < M; j++) {
-					car_darray[i][j] = Car("car" + std::to_string(i));
-					car_darray[i][j].displayDataCar();
+					car_darray[i][j] = Car("car" + std::to_string(i * M + j));
+				}
+				
+			}
+			Car* d_car_array[N];
+			for (int i = 0; i < N; i++) {
+				d_car_array[i] = new Car("car" + std::to_string(i));
+			}
+			Car* d_car_darray[N][M];
+			for (int i = 0; i < N; i++) {
+				for (int j = 0; j < M; j++) {
+					d_car_darray[i][j] = new Car("car" + std::to_string(i*M + j));
+					d_car_darray[i][j]->displayDataCar();
 				}
 				
 			}
