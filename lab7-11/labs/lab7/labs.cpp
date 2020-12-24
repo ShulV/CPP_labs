@@ -465,6 +465,13 @@ int func1(int num1, int num2) {
 	return num - num2;
 }
 
+//производный класс
+class TaxiCar : public Car {
+private:
+	std::string company_name;
+public:
+	TaxiCar(std::string name) : Car(name) {}
+};
 
 int main()
 
@@ -479,6 +486,7 @@ int main()
 			<< "Введите 4 - ПОКАЗАТЬ 9 ЛАБУ\n"
 			<< "Введите 5 - ПОКАЗАТЬ 10 ЛАБУ\n"
 			<< "Введите 6 - ПОКАЗАТЬ 11 ЛАБУ\n"
+			<< "Введите 7 - ПОКАЗАТЬ 12 ЛАБУ\n"
 			<< "Введите 0 - ВЫХОД\n" << "ваш выбор: ";
 		std::cin >> choice;
 		std::cout << std::endl;
@@ -753,6 +761,9 @@ int main()
 			/////////////////////////////////////////////////////////////
 			Car* cars[N];
 
+		}
+		if (choice == 7) {
+			TaxiCar taxi_car = TaxiCar("Solaris");
 		}
 
 	}
