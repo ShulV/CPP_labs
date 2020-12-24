@@ -102,18 +102,18 @@ class Car
 protected:
 	std::string name;
 	int benzine;
+	int price;
+	std::string color;
+	int speed;
+	int max_speed;
+
+	Engine* engine;
 private:
 	int* p;//для демонстрации глубокого копирования
 	int size;//для демонстрации глубокого копирования
 	
 	int x = 0;
 	int y = 0;
-	int price;
-	std::string color;
-	int speed;
-	int max_speed;
-	
-	Engine* engine;
 	static int count;
 public:
 	Car();
@@ -487,6 +487,34 @@ public:
 	void callTaxi(std::string address) {
 		std::cout << "По адресу " << address << " приехала машина " << name << std::endl;
 	}
+	//перегрузка оператора присваивания объекту производного класса объектов базового класса
+	TaxiCar& operator=(const TaxiCar& other_car){
+		if (this->engine != nullptr) {
+			delete[] this->engine;
+		}
+		this->benzine = other_car.benzine;
+		this->color = other_car.color;
+		this->name = other_car.name;
+		this->price = other_car.price;
+		this->engine = new Engine();
+		this->engine = other_car.engine;
+		return *this;
+	}
+	/*
+	Car& Car::operator=(const Car& other_car)
+{
+	if (this->engine != nullptr) {
+		delete[] this->engine;
+	}
+	this->benzine = other_car.benzine;
+	this->color = other_car.color;
+	this->name = other_car.name;
+	this->price = other_car.price;
+	this->engine = new Engine();
+	this->engine = other_car.engine;
+	return *this;
+}
+	*/
 };
 
 int main()
@@ -779,12 +807,15 @@ int main()
 
 		}
 		if (choice == 7) {
-			TaxiCar taxi_car = TaxiCar("Solaris");
+			TaxiCar taxi_car = TaxiCar("Reno Logan");
 			taxi_car.displayDataCar();
 			taxi_car.callTaxi("Красноармейский 69Б");
-			TaxiCar taxi_car2 = TaxiCar("Solaris", 777);
+			TaxiCar taxi_car2 = TaxiCar("Kia Solaris", 777);
 			taxi_car2.addBenzine(10, 2);
 			taxi_car2.displayDataCar();
+			taxi_car2 = taxi_car;
+			taxi_car2.displayDataCar();
+
 		}
 
 	}
