@@ -101,6 +101,7 @@ class Car
 {
 protected:
 	std::string name;
+	int benzine;
 private:
 	int* p;//для демонстрации глубокого копирования
 	int size;//для демонстрации глубокого копирования
@@ -111,7 +112,7 @@ private:
 	std::string color;
 	int speed;
 	int max_speed;
-	int benzine;
+	
 	Engine* engine;
 	static int count;
 public:
@@ -468,9 +469,21 @@ int func1(int num1, int num2) {
 
 //производный класс
 class TaxiCar : public Car {
+private:
+	int code_name;
 public:
 	//вызов конструктора базового класса
 	TaxiCar(std::string name) : Car(name) {}
+	//перегрузка метода базового класса (с вызовом базового класса)
+	TaxiCar(std::string name, int code_name) : Car(name) {
+		code_name = code_name;
+	}
+
+	//перегрузка метода базового класса (без вызова базового класса)
+	void addBenzine(int liters, int work_bonus) {
+		std::cout << liters + work_bonus + "lit. benzine added!";
+		benzine += liters + work_bonus;
+	}
 	void callTaxi(std::string address) {
 		std::cout << "По адресу " << address << " приехала машина " << name << std::endl;
 	}
@@ -769,6 +782,9 @@ int main()
 			TaxiCar taxi_car = TaxiCar("Solaris");
 			taxi_car.displayDataCar();
 			taxi_car.callTaxi("Красноармейский 69Б");
+			TaxiCar taxi_car2 = TaxiCar("Solaris", 777);
+			taxi_car2.addBenzine(10, 2);
+			taxi_car2.displayDataCar();
 		}
 
 	}
