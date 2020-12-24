@@ -99,13 +99,14 @@ private:
 
 class Car
 {
+protected:
+	std::string name;
 private:
 	int* p;//для демонстрации глубокого копирования
 	int size;//для демонстрации глубокого копирования
 	
 	int x = 0;
 	int y = 0;
-	std::string name;
 	int price;
 	std::string color;
 	int speed;
@@ -467,10 +468,12 @@ int func1(int num1, int num2) {
 
 //производный класс
 class TaxiCar : public Car {
-private:
-	std::string company_name;
 public:
+	//вызов конструктора базового класса
 	TaxiCar(std::string name) : Car(name) {}
+	void callTaxi(std::string address) {
+		std::cout << "По адресу " << address << " приехала машина " << name << std::endl;
+	}
 };
 
 int main()
@@ -764,6 +767,8 @@ int main()
 		}
 		if (choice == 7) {
 			TaxiCar taxi_car = TaxiCar("Solaris");
+			taxi_car.displayDataCar();
+			taxi_car.callTaxi("Красноармейский 69Б");
 		}
 
 	}
