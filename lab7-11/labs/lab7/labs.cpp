@@ -28,6 +28,33 @@
 
 #define clear(stream) rewind((stream)) //очистка потока
 const int CAR_NUMBERS = 10;
+
+class Point {
+public:
+	int x;
+	int y;
+	Point(int x, int y) {
+		this->x = x;
+		this->y = y;
+	}
+};
+
+//абстрактный класс
+class Vehicle {
+
+public:
+	int x;
+	int y;
+	Point getPosition() {
+		return Point(this->x, this->y);
+	}
+	virtual void move(int x, int y, int z) = 0;//чисто виртаульная функция
+};
+
+void Vehicle::move(int x, int y, int z) {
+
+}
+
 class Car;
 
 int* allocateArray(int size);
@@ -97,7 +124,7 @@ private:
 	int quantityOfCylinders; //количество цилиндров
 };
 
-class Car
+class Car : public Vehicle
 {
 protected:
 	std::string name;
@@ -121,10 +148,10 @@ public:
 	Car(std::string name, int price, std::string color, int speed, int benzine, int max_speed, Engine* engine);
 	Car(std::string name);
 	~Car();
-	
+	void move(int x, int y, int z) override;//переопределенная функция (в базовом чисто виртаульная)
 	std::string getName();
 	int getBenzine();
-	void goToGasStation(int liters);
+	void goToGasStation(int liters);//функция, вызывающая другую виртуальную функцию
 	void readCarData();
 	void displayDataCar();
 	virtual void addBenzine(int liters); //виртуальная функция
@@ -238,6 +265,12 @@ Car::~Car()
 
 	count--;
 	std::cout << "\t\t\t" << "ВЫЗВАЛСЯ ДЕКОНСТРУКТОР : " << this << std::endl;
+}
+
+void Car::move(int x, int y, int z)
+{
+	this->x += x;
+	this->y += y;
 }
 
 std::string Car::getName()
