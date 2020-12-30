@@ -122,9 +122,12 @@ public:
 	Car(std::string name);
 	~Car();
 	
+	std::string getName();
+	int getBenzine();
+	void goToGasStation(int liters);
 	void readCarData();
 	void displayDataCar();
-	void addBenzine(int liters);
+	virtual void addBenzine(int liters); //виртуальная функция
 	void startEngine();
 	void stopEngine();
 	void addSpeed(int speed);
@@ -237,6 +240,22 @@ Car::~Car()
 	std::cout << "\t\t\t" << "ВЫЗВАЛСЯ ДЕКОНСТРУКТОР : " << this << std::endl;
 }
 
+std::string Car::getName()
+{
+	return this->name;
+}
+
+int Car::getBenzine()
+{
+	return this->benzine;
+}
+
+void Car::goToGasStation(int liters)
+{
+	std::cout << "I'm going to gas station!\n";
+	this->addBenzine(liters);
+}
+
 void Car::readCarData() {
 	int number;
 	std::cout << "ENTER CAR DATA:" << std::endl;
@@ -292,7 +311,7 @@ void Car::displayDataCar()
 
 void Car::addBenzine(int liters)
 {
-	std::cout << liters << "lit. benzine added!" << std::endl;
+	std::cout << liters << "lit. benzine added! (base)" << std::endl;
 	this->benzine += liters;
 }
 
@@ -471,18 +490,22 @@ int func1(int num1, int num2) {
 class TaxiCar : public Car {
 private:
 	int code_name;
+	int work_bonus = 10; //дополнительный процент бензина для такси
 public:
 	//вызов конструктора базового класса
-	TaxiCar(std::string name) : Car(name) {}
+	TaxiCar(std::string name) : Car(name) {
+		code_name = 0;
+	}
 	//перегрузка метода базового класса (с вызовом базового класса)
-	TaxiCar(std::string name, int code_name) : Car(name) {
-		code_name = code_name;
+	 TaxiCar(std::string name, int code_name) : Car(name) {
+		this->code_name = code_name;
 	}
 
 	//перегрузка метода базового класса (без вызова базового класса)
-	void addBenzine(int liters, int work_bonus) {
-		std::cout << liters + work_bonus + "lit. benzine added!";
-		benzine += liters + work_bonus;
+	void addBenzine(int liters) override{
+		int benz = liters + (int)(liters * work_bonus / 100);
+		benzine += benz;
+		std::cout << benz + "lit. benzine added! (derived)" << std::endl;
 	}
 	void callTaxi(std::string address) {
 		std::cout << "По адресу " << address << " приехала машина " << name << std::endl;
@@ -500,21 +523,7 @@ public:
 		this->engine = other_car.engine;
 		return *this;
 	}
-	/*
-	Car& Car::operator=(const Car& other_car)
-{
-	if (this->engine != nullptr) {
-		delete[] this->engine;
-	}
-	this->benzine = other_car.benzine;
-	this->color = other_car.color;
-	this->name = other_car.name;
-	this->price = other_car.price;
-	this->engine = new Engine();
-	this->engine = other_car.engine;
-	return *this;
-}
-	*/
+
 };
 
 int main()
@@ -803,19 +812,40 @@ int main()
 			Car* d_car_darray2 = new Car[N, M];//только прямоугольный массив
 			//Car cars[N, M]; --- error
 			/////////////////////////////////////////////////////////////
-			Car* cars[N];
+			//Car* cars[N];
 
 		}
 		if (choice == 7) {
-			TaxiCar taxi_car = TaxiCar("Reno Logan");
+			Car lada = Car("Lada Granta (base)");
+			TaxiCar taxi_car = TaxiCar("Reno Logan (derived)");
 			taxi_car.displayDataCar();
 			taxi_car.callTaxi("Красноармейский 69Б");
-			TaxiCar taxi_car2 = TaxiCar("Kia Solaris", 777);
-			taxi_car2.addBenzine(10, 2);
-			taxi_car2.displayDataCar();
+			TaxiCar taxi_car2 = TaxiCar("Kia Solaris (derived)", 777);
+			taxi_car2.addBenzine(10);
+			std::cout << taxi_car2.getName() << "\tБЕНЗИН : " << taxi_car2.getBenzine() <<  std::endl;
 			taxi_car2 = taxi_car;
-			taxi_car2.displayDataCar();
-
+			std::cout << taxi_car2.getName() << "\tБЕНЗИН : " << taxi_car2.getBenzine() << std::endl;
+			std::cout << "--------------------------------------------------------------------" << std::endl;
+			taxi_car.goToGasStation(10);//вызов виртуальной функции через через вызов не виртуальной функции ПРОИЗВОДНОГО класса
+			std::cout << taxi_car.getName() << "\tБЕНЗИН : " << taxi_car.getBenzine() << std::endl;
+			lada.goToGasStation(10);//вызов виртуальной функции через через вызов не виртуальной функции БАЗОВОГО класса
+			std::cout << lada.getName() << "\tБЕНЗИН : " << lada.getBenzine() << std::endl;
+			//-------------------------------------------------
+			//метод addBenzine() определен в базовом классе и перегружен в производном
+			//его вызывает метод goToGasStation(), который определен ТОЛЬКО в базовом классе (перегрузки в наследнике нет).
+			//в таком случае, ЕСЛИ:
+			//addBenzine() - ВИРТУАЛЬНЫЙ, то метод goToGasStation() вызовет соотвествующий вариант перегрузки addBenzine()
+			//addBenzine() - НЕ ВИРТУАЛЬНЫЙ, то метод goToGasStation() вызовет addBenzine() из того же класса, в котором он сам определен (в данном случае только из базового класса Car)
+			//-------------------------------------------------
+			std::cout << "---------------------------ВЫЗОВ ВИРТУАЛЬНОЙ ФУНКЦИИ ЧЕРЕЗ ДИНАМИЧЕСКИЕ ОБЪЕКТЫ БАЗОВОГО И ПРОИЗВОДНОГО КЛАССОВ--------------------------------" << std::endl;
+			Car* base_car; // указатели на базовый класс
+			TaxiCar* derived_car_taxi; // указатель на производный класс
+			base_car = new Car("Lada Priora (base)");
+			derived_car_taxi = new TaxiCar("Reno Logan (derived)");
+			base_car = derived_car_taxi; // присваивание указателю базового класса указателя производного 
+			base_car->addBenzine(10);  // Если addBenzine() виртуальная, вызов из производного класса
+			//base_car->addBenzine(10);  // Если addBenzine() НЕ виртуальная, вызов из базового класса
+			std::cout << base_car->getName() << "\tБЕНЗИН : " << base_car->getBenzine() << std::endl;
 		}
 
 	}
